@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Craigslist For Stocks</h1>
+
+<form action="{% url 'stocks' %}" method="post">
+
+	{% csrf_token %}
+	{{ form }}
+
+	<input type="submit" value="Trade" />
+
+</form>
+
+{% endblock %}

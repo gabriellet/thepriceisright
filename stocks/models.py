@@ -17,8 +17,10 @@ class ParentOrder(models.Model):
 	is_sell = models.BooleanField(default=True)
 	time_executed = models.DateTimeField(auto_now=False, auto_now_add=True)
 	order_id = models.AutoField(primary_key=True)
+	# def __str__(self):
+	# 	return self.stock_type
 	def __str__(self):
-		return self.order_id
+		return str(self.order_id) + ": " + str(self.quantity) + "x" + self.stock_type
 
 @python_2_unicode_compatible
 class ChildOrder(models.Model):
@@ -27,4 +29,4 @@ class ChildOrder(models.Model):
 	is_successful = models.BooleanField(default=False)
 	price = models.FloatField(default=0.0)
 	def __str__(self):
-		return self.id
+		return str(self.id) + ": " + str(self.quantity)
