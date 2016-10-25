@@ -17,8 +17,3 @@ def index(request):
 	else:
 		form = TradeForm()
 	return render(request, 'stocks.html', {'form': form})
-
-def trade(request):
-	return HttpResponse('Successful Trade')
-
-

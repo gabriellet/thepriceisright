@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Salutations</h1>
+<h1>These are all orders being worked on</h1>
+
+{% if orders %}
+    <ul>
+        {% for order in orders %}
+        <li>ID = {{ order.id }} Sell = {{ order.is_sell }} for this quantity: {{ order.quantity }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<a href="{% url 'stocks' %}">Place an Order</a>
+
+{% endblock %}
