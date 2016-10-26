@@ -37,10 +37,30 @@ class ParentOrder(models.Model):
 		print "Quoted at %s" % price
 		return price
 
+	def execute_sell(self, quantity, price):
+		url   = ORDER.format(self.id, quantity, price)
+		order = json.loads(urllib2.urlopen(url).read())
+		return order
+
+	def create_child(self, order, attempted_price):
+		if (order['avg_price'] == 0):
+			co = ChildOrder.objects.create(parent_order=self, quantity = order['qty']
+										is_successful=False, price=attempted_price)
+		else:
+			co = ChildOrder.objects.create(parent_order=self, quantity = order['qty']
+										is_successful=True, price=order['avg_price'])
+		print co
+		co.save()
+		return co
+
+
 	def trade(self):
 		number_of_successes = 0
 		maximum_child_size = self.quantity / 10  # hardcoded to split by 10%
 
+		price = self.query_market_price()
+		order = self.execute_sell(order['qty'], order['avg_price'])
+		self.create_child(order, price)
 		
 
 
