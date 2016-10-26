@@ -1,5 +1,13 @@
 {% extends 'base.html' %}
 
+{% load staticfiles %}
+
+{% block head-extras %}
+	<!-- Custom styles for this page -->
+	<link href="{% static "priceisright/signin.css" %}" rel="stylesheet">
+{% endblock %}
+
+
 {% block content %}
 
 {% if form.errors %}
@@ -29,7 +37,5 @@
       </form>
 
     </div> 
-
-
 
 {% endblock %}
