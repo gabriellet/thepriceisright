@@ -7,27 +7,27 @@
 	<link href="{% static "priceisright/signin.css" %}" rel="stylesheet">
 {% endblock %}
 
-
 {% block content %}
-
-{% if form.errors %}
-	<p>Your username and password didn't match. Please try again.</p>
-{% endif %}
-
-{% if next %}
-	{% if user.is_authenticated %}
-		<p>Your account doesn't have access to this page. To proceed, please login with an account that has access.</p>
-	{% else %}
-		<p>Please login to see this page.</p>
-	{% endif %}
-{% endif %}
-
 
 	<div class="container">
 
       <form class="form-signin" method="post" action="{% url 'login' %}">
       	{% csrf_token %}
         <h2 class="form-signin-heading">Please sign in</h2>
+
+        {% if form.errors %}
+			<p>Your username and password didn't match. Please try again.</p>
+		{% endif %}
+
+		{% if next %}
+			{% if user.is_authenticated %}
+				<p>Your account doesn't have access to this page. To proceed, please login with an account that has access.</p>
+			{% else %}
+				<p>Please login to see this page.</p>
+			{% endif %}
+		{% endif %}
+
+
         <label for="{{ form.username.id_for_label }}" class="sr-only">Username</label>
         {{ form.username }}
         <label for="{{ form.password.id_for_label }}" class="sr-only">Password</label>
