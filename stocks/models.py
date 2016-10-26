@@ -47,6 +47,7 @@ class ParentOrder(models.Model):
 
 	def create_child(self, order, attempted_price):
 		if (order['avg_price'] == 0):
+
 			co = ChildOrder.objects.create(
 				parent_order=self, 
 				quantity = order['qty'],
@@ -60,6 +61,7 @@ class ParentOrder(models.Model):
 				is_successful=True, 
 				price=order['avg_price']
 			)
+		print "child created: "
 		print co
 		co.save()
 		return co
@@ -95,6 +97,11 @@ class ParentOrder(models.Model):
 				child_order_size *= 2
 				number_of_successes = 0
 			time.sleep(N)
+<<<<<<< HEAD
+=======
+		# DONE!
+		self.success = True
+>>>>>>> leon
 
 
 

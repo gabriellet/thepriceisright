@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 
 from forms import ParentOrderForm
 from models import ParentOrder
+from threading import Thread
 
 @login_required(login_url="/")
 def index(request):
@@ -17,7 +18,10 @@ def index(request):
 				user = request.user)
 			if order.is_valid():
 				order.save()
-			order.trade()
+
+			t1 = Thread(target=order.trade)  # automatically try to execute trade upon submission
+			t1.daemon = True
+			t1.start()
 			return redirect('index')
 
 		else:
