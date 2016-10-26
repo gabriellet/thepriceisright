@@ -2,14 +2,13 @@
 
 {% block content %}
 
-<h1>Salutations, {{ user }}</h1>
 <h1>Working Orders</h1>
 
 {% if orders %}
     <ul>
         {% for order in orders %}
         	{% if order.success == False %}
-        		<li>ID = {{ order.id }} Sell = {{ order.is_sell }} for this quantity: {{ order.quantity }}</li>
+        		<li><a href="{% url 'order-detail' order.id %">ID = {{ order.id }} Sell = {{ order.is_sell }} for this quantity: {{ order.quantity }}</a></li>
         	{% endif %}
         {% endfor %}
     </ul>
@@ -21,7 +20,7 @@
     <ul>
         {% for order in orders %}
         	{% if order.success == True %}
-        		<li>ID = {{ order.id }} Sell = {{ order.is_sell }} for this quantity: {{ order.quantity }}</li>
+        		<li><a href="{% url 'order-detail' order.id %">ID = {{ order.id }} Sell = {{ order.is_sell }} for this quantity: {{ order.quantity }}</a></li>
         	{% endif %}
         {% endfor %}
     </ul>
