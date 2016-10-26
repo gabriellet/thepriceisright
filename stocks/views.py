@@ -26,4 +26,4 @@ def index(request):
 	else:
 		form = ParentOrderForm()
 
-	return render(request, 'stocks.html', {'form': form})
+	return render(request, 'place-order.html', {'form': form})

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Craigslist For Stocks</h1>
+
+<form action="{% url 'place-order' %}" method="post">
+
+	{% csrf_token %}
+	<p>{{ form.quantity.label_tag }} {{ form.quantity }} x ACME ETF</p>
+
+	<input type="submit" value="Submit" />
+
+</form>
+
+{% endblock %}
