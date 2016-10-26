@@ -10,8 +10,8 @@ Members:
 * Aaron Ong @Aaronong    
 
 ### Version History
-v2.0 - Demo Version (Team Assignment 3)
-v1.0 - Toy Project (Homework 2)
+v2.0 - Demo Version (Team Assignment 3)  
+v1.0 - Toy Project (Homework 2)  
 
 ### Usage
 `python manage.py runserver`  
