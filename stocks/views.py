@@ -1,6 +1,7 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
+from django.db.models import Avg, Sum
 
 from forms import ParentOrderForm
 from models import ParentOrder, ChildOrder
@@ -41,5 +42,17 @@ def order_detail(request, id):
 		raise Http404('No Child Orders')
 	context_dict = {'child_orders': children}
 
+	parent = get_object_or_404(ParentOrder, id=id)
+	
+	average_price = children.aggregate(Avg('price'))
+	total_price = children.aggregate(Sum('price'))
+	total_sold = children.aggregate(Sum('quantity'))
 
-	return render(request, 'order_detail.html', context_dict)
+	return render(request, 'order_detail.html', 
+		{
+		'child_orders': children, 
+		'parent_order': parent, 
+		'average_price': average_price['price__avg'],
+		'total_price': total_price['price__sum'],
+		'total_sold': total_sold['quantity__sum']
+		})

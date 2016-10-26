@@ -9,13 +9,15 @@
 
 {% block content %}
 
-<h2 class="sub-header">Order: </h2>
+<h2 class="sub-header">Order: {{ parent_order.quantity }} x {{ parent_order.stock_type }}</h2>
+Average Price: {{ average_price }} Total Price: {{ total_price }} QTY Sold: {{ total_sold }}
 <div class="progress">
   <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar"
   aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:40%">
     40% Complete (success)
   </div>
 </div>
+
 <div class="table-responsive">
     <table class="table table-striped">
       <thead>
