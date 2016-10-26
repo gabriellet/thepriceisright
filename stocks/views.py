@@ -1,6 +1,7 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
+from django.db.models import Avg, Sum
 
 from forms import ParentOrderForm
 from models import ParentOrder, ChildOrder
@@ -40,6 +41,9 @@ def order_detail(request, id):
 	except ChildOrder.DoesNotExist:
 		raise Http404('No Child Orders')
 	context_dict = {'child_orders': children}
+
+	context_dict['parent_order'] = get_object_or_404(ParentOrder, id=id)
+	print context_dict['parent_order'].id
 
 
 	return render(request, 'order_detail.html', context_dict)
