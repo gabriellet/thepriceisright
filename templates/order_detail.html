@@ -29,7 +29,11 @@
         {% if child_orders %}
         <tbody>
             {% for co in child_orders %}
-                <tr>
+                {% if co.is_successful %} 
+                    <tr class="success">
+                {% else %}
+                    <tr class="danger">
+                {% endif %}
                     <td> {{ co.time_executed }}
                     <td> {{ co.id }}
                     <td> {{ co.quantity }}
