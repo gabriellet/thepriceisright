@@ -4,7 +4,7 @@
 
 <h1>Craigslist For Stocks</h1>
 
-<form action="{% url 'place-order' %}" method="post">
+<form action="{% url 'place_order' %}" method="post">
 
 	{% csrf_token %}
 	<p>{{ form.quantity.label_tag }} {{ form.quantity }} x ACME ETF</p>

@@ -8,7 +8,7 @@
     <ul>
         {% for order in orders %}
         	{% if order.success == False %}
-        		<li><a href="{% url 'order-detail' order.id %">ID = {{ order.id }} Sell = {{ order.is_sell }} for this quantity: {{ order.quantity }}</a></li>
+        		<li><a href="{% url 'order_detail' order.id %}">ID = {{ order.id }} Sell = {{ order.is_sell }} for this quantity: {{ order.quantity }}</a></li>
         	{% endif %}
         {% endfor %}
     </ul>
@@ -20,12 +20,12 @@
     <ul>
         {% for order in orders %}
         	{% if order.success == True %}
-        		<li><a href="{% url 'order-detail' order.id %">ID = {{ order.id }} Sell = {{ order.is_sell }} for this quantity: {{ order.quantity }}</a></li>
+        		<li><a href="{% url 'order_detail' order.id %}">ID = {{ order.id }} Sell = {{ order.is_sell }} for this quantity: {{ order.quantity }}</a></li>
         	{% endif %}
         {% endfor %}
     </ul>
 {% endif %}
 
-<a href="{% url 'place-order' %}">Place an Order</a>
+<a href="{% url 'place_order' %}">Place an Order</a>
 
 {% endblock %}
