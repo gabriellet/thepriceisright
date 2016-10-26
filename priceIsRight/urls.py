@@ -26,5 +26,6 @@ urlpatterns = [
     url(r'^login/$', auth_views.login, {'template_name': 'login.html', 'authentication_form': LoginForm}, name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page': '/login'}, name='logout'),
     url(r'^place-order/$', views.index, name='place-order'),
+    url(r'^order/(?P<id>[0-9]+)', views.order_detail, name='order-detail'),
     url(r'^admin/', admin.site.urls),
 ]

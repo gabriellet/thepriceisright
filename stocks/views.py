@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.http import Http404
 
 from forms import ParentOrderForm
-from models import ParentOrder
+from models import ParentOrder, ChildOrder
 from threading import Thread
 
 @login_required(login_url="/")
@@ -30,4 +31,15 @@ def index(request):
 	else:
 		form = ParentOrderForm()
 
-	return render(request, 'place-order.html', {'form': form})
+	return render(request, 'place_order.html', {'form': form})
+
+@login_required(login_url="/")
+def order_detail(request, id):
+	try:
+		children = ChildOrder.objects.filter(parent_order__id=id)
+	except ChildOrder.DoesNotExist:
+		raise Http404('No Child Orders')
+	context_dict = {'child_orders': children}
+
+
+	return render(request, 'order_detail.html', context_dict)

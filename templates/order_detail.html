@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Salutations, {{ user }}</h1>
+
+<h1>Child Orders</h1>
+{% if child_orders %}
+    <ul>
+    {% for co in child_orders %}
+    	<li>ID = {{ co.id }}: quantity: {{ co.quantity }} sold for {{ co.price}} {{ co.is_successful }} {{ co.time_executed }}</li>
+    {% endfor %}
+    </ul>
+{% endif %}
+
+{% endblock %}
