@@ -6,7 +6,7 @@ from stocks.models import ParentOrder
 
 @login_required(login_url="login/")
 def index(request):
-    order_list = ParentOrder.objects.all()
+    order_list = ParentOrder.objects.all().order_by('-time_executed')
     context_dict = {'orders': order_list}
 
     return render(request, "index.html", context_dict)

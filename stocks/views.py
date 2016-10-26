@@ -43,7 +43,16 @@ def order_detail(request, id):
 	context_dict = {'child_orders': children}
 
 	parent = get_object_or_404(ParentOrder, id=id)
-	print parent
+	
+	average_price = children.aggregate(Avg('price'))
+	total_price = children.aggregate(Sum('price'))
+	total_sold = children.aggregate(Sum('quantity'))
 
-
-	return render(request, 'order_detail.html', {'child_orders': children, 'parent_order': parent})
+	return render(request, 'order_detail.html', 
+		{
+		'child_orders': children, 
+		'parent_order': parent, 
+		'average_price': average_price['price__avg'],
+		'total_price': total_price['price__sum'],
+		'total_sold': total_sold['quantity__sum']
+		})
