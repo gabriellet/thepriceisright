@@ -1,12 +1,22 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-
-from stocks.models import ParentOrder
+from django.db.models import Sum
+from stocks.models import ParentOrder, ChildOrder
 # from forms import UserForm
 
 @login_required(login_url="login/")
 def index(request):
     order_list = ParentOrder.objects.all().order_by('-time_executed')
+    for order in order_list:
+    	if order.success == False:
+    		child_sold = ChildOrder.objects.filter(parent_order=order.id).aggregate(Sum('quantity'))['quantity__sum']
+    		if order.quantity == 0:
+    			order.progress = 100
+    		else:
+    			order.progress = (child_sold/order.quantity) * 100
+    	else:
+    		order.progress = 100
+    	print order.progress
     context_dict = {'orders': order_list}
 
     return render(request, "index.html", context_dict)
