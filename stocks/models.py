@@ -11,7 +11,7 @@ class ParentOrder(models.Model):
 	time_executed = models.DateTimeField(blank=False, auto_now_add=True)
 	success = models.BooleanField(default=False)
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
-
+	
 	# checks if quantity is positive
 	def valid_order(self):
 		if self.quantity < 0:
