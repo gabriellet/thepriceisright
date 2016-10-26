@@ -14,20 +14,22 @@
 	{% endif %}
 {% endif %}
 
-<form method="post" action="{% url 'login' %}">
-	{% csrf_token %}
-<table>
-	<tr>
-		<td>{{ form.username.label_tag }}</td>
-		<td>{{ form.username }}</td>
-	</tr>
-	<tr>
-		<td>{{ form.password.label_tag }}</td>
-		<td>{{ form.password }}</td>
-	</tr>
-</table>
-<input type="submit" value="Login"/>
-<input type="hidden" name="next" value="{{ next }}"/>
-</form>
+
+	<div class="container">
+
+      <form class="form-signin" method="post" action="{% url 'login' %}">
+      	{% csrf_token %}
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <label for="{{ form.username.id_for_label }}" class="sr-only">Username</label>
+        {{ form.username }}
+        <label for="{{ form.password.id_for_label }}" class="sr-only">Password</label>
+        {{ form.password }}
+        <button class="btn btn-lg btn-primary btn-block" type="submit" value="Login">Sign in</button>
+        <input type="hidden" name="next" value="{{ next }}"/>
+      </form>
+
+    </div> 
+
+
 
 {% endblock %}
