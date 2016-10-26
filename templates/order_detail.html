@@ -1,20 +1,42 @@
 {% extends 'base.html' %}
 
+{% load staticfiles %}
+
+{% block head-extras %}
+    <!-- Custom styles for this page -->
+    <link href="{% static "stocks/dashboard.css" %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
 
-<h1>Order </h1>
-{% if child_orders %}
-    <ul>
-    {% for co in child_orders %}
-    	<li>{{ co.time_executed }}: Child Order #{{ co.id }}: QTY: {{ co.quantity }} 
-            {% if co.is_successful %} 
-                SUCCEEDED sold for {{ co.price}}
-            {% else %}
-                FAILED
-            {% endif %}
-        </li>
-    {% endfor %}
-    </ul>
-{% endif %}
+<h2 class="sub-header">Order: </h2>
+<div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Time</th>
+          <th>Child Order</th>
+          <th>Quantity</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+        {% if child_orders %}
+        <tbody>
+            {% for co in child_orders %}
+                <tr>
+                    <td> {{ co.time_executed }}
+                    <td> #{{ co.id }}
+                    <td> {{ co.quantity }}
+                    <td> {% if co.is_successful %} 
+                            SUCCEEDED sold for {{ co.price}}
+                        {% else %}
+                            FAILED
+                        {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+        {% endif %}
+    </table>
+  </div>
 
 {% endblock %}
