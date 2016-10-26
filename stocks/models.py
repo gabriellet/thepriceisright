@@ -97,15 +97,8 @@ class ParentOrder(models.Model):
 				child_order_size *= 2
 				number_of_successes = 0
 			time.sleep(N)
-<<<<<<< HEAD
-=======
 		# DONE!
 		self.success = True
->>>>>>> leon
-
-
-
-
 
 @python_2_unicode_compatible
 class ChildOrder(models.Model):
