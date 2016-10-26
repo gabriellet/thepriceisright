@@ -1,31 +1,72 @@
 {% extends 'base.html' %}
 
+{% load staticfiles %}
+
+{% block head-extras %}
+    <!-- Custom styles for this page -->
+    <link href="{% static "stocks/dashboard.css" %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
 
-<h1>Working Orders</h1>
+  <h2 class="sub-header">Current Orders</h2>
 
-{% if orders %}
-    <ul>
-        {% for order in orders %}
-        	{% if order.success == False %}
-        		<li><a href="{% url 'order-detail' order.id %">ID = {{ order.id }} Sell = {{ order.is_sell }} for this quantity: {{ order.quantity }}</a></li>
-        	{% endif %}
-        {% endfor %}
-    </ul>
-{% endif %}
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Sell</th>
+          <th>Quantity</th>
+          <th>Time Executed</th>
+        </tr>
+      </thead>
+      {% if orders %}
+        <tbody>
+            {% for order in orders %}
+                {% if order.success == False %}
+                    <tr>
+                        <td> <a href="{% url 'order-detail' order.id %">{{ order.id }} </a>
+                        <td> {{ order.is_sell }}
+                        <td> {{ order.quantity }}
+                        <td> {{ order.time_executed }}
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    {% endif %}
+    </table>
+  </div>
 
-<h1>Completed Orders</h1>
+  <h2 class="sub-header">Completed Orders</h2>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Sell</th>
+          <th>Quantity</th>
+          <th>Time Executed</th>
+        </tr>
+      </thead>
+      {% if orders %}
+        <tbody>
+            {% for order in orders %}
+                {% if order.success == True %}
+                    <tr>
+                        <td> <a href="{% url 'order-detail' order.id %">{{ order.id }} </a>
+                        <td> {{ order.is_sell }}
+                        <td> {{ order.quantity }}
+                        <td> {{ order.time_executed }}
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    {% endif %}
+    </table>
+  </div>
+        
 
-{% if orders %}
-    <ul>
-        {% for order in orders %}
-        	{% if order.success == True %}
-        		<li><a href="{% url 'order-detail' order.id %">ID = {{ order.id }} Sell = {{ order.is_sell }} for this quantity: {{ order.quantity }}</a></li>
-        	{% endif %}
-        {% endfor %}
-    </ul>
-{% endif %}
 
-<a href="{% url 'place-order' %}">Place an Order</a>
 
 {% endblock %}

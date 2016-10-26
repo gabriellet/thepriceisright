@@ -1,15 +1,21 @@
 {% extends 'base.html' %}
 
+{% load staticfiles %}
+
+{% block head-extras %}
+    <!-- Custom styles for this page -->
+    <link href="{% static "stocks/dashboard.css" %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
 
-<h1>Craigslist For Stocks</h1>
+<h2 class="sub-header">Craigslist For Stocks</h2>
 
 <form action="{% url 'place-order' %}" method="post">
 
 	{% csrf_token %}
 	<p>{{ form.quantity.label_tag }} {{ form.quantity }} x ACME ETF</p>
-
-	<input type="submit" value="Submit" />
+	<button class="btn btn-lg btn-primary" type="submit" value="Submit">Submit</button>
 
 </form>
 
