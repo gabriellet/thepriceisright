@@ -42,8 +42,8 @@ def order_detail(request, id):
 		raise Http404('No Child Orders')
 	context_dict = {'child_orders': children}
 
-	context_dict['parent_order'] = get_object_or_404(ParentOrder, id=id)
-	print context_dict['parent_order'].id
+	parent = get_object_or_404(ParentOrder, id=id)
+	print parent
 
 
-	return render(request, 'order_detail.html', context_dict)
+	return render(request, 'order_detail.html', {'child_orders': children, 'parent_order': parent})
