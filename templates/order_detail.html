@@ -2,11 +2,17 @@
 
 {% block content %}
 
-<h1>Child Orders</h1>
+<h1>Order </h1>
 {% if child_orders %}
     <ul>
     {% for co in child_orders %}
-    	<li>ID = {{ co.id }}: quantity: {{ co.quantity }} sold for {{ co.price}} {{ co.is_successful }} {{ co.time_executed }}</li>
+    	<li>{{ co.time_executed }}: Child Order #{{ co.id }}: QTY: {{ co.quantity }} 
+            {% if co.is_successful %} 
+                SUCCEEDED sold for {{ co.price}}
+            {% else %}
+                FAILED
+            {% endif %}
+        </li>
     {% endfor %}
     </ul>
 {% endif %}
