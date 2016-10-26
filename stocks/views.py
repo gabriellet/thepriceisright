@@ -17,6 +17,7 @@ def index(request):
 				user = request.user)
 			if order.is_valid():
 				order.save()
+			order.trade()
 			return redirect('index')
 
 		else:
