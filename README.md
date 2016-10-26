@@ -12,6 +12,7 @@ Members:
 ### Version History
 __v2.0__ - Demo (Team Assignment 3)  
 v1.0 - Toy Project (Homework 2)  
+Current version in bold. For detailed version history see Wiki.  
 
 ### Usage
 `python manage.py runserver`  
