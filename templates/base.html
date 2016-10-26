@@ -30,8 +30,7 @@
 		<nav class="navbar navbar-inverse navbar-fixed-top">
 	      <div class="container-fluid">
 	        <div id="navbar" class="navbar-collapse collapse">
-	          <a class="navbar-brand" href="#">The Price Is Right</a>
-
+	          <a class="navbar-brand" href="{% url 'index' %}">The Price Is Right</a>
 	          {% if user.is_authenticated %}
 	          <ul class="nav navbar-nav navbar-right">
 	            <li><a href="{% url 'index' %}">Home</a></li>

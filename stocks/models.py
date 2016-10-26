@@ -16,7 +16,7 @@ SUCCESS_TOLERANCE = 2
 # Create your models here.
 @python_2_unicode_compatible
 class ParentOrder(models.Model):
-	quantity = models.IntegerField(blank=False, default=0)
+	quantity = models.IntegerField(blank=False, default=1)
 	stock_type = models.CharField(max_length=20)
 	is_sell = models.BooleanField(blank=False, default=True)
 	time_executed = models.DateTimeField(blank=False, auto_now_add=True)

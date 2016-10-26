@@ -48,11 +48,17 @@ def order_detail(request, id):
 	total_price = children.aggregate(Sum('price'))
 	total_sold = children.aggregate(Sum('quantity'))
 
+	if total_sold['quantity__sum'] == None:
+		progress = 100
+	else:
+		progress = (total_sold['quantity__sum']/parent.quantity) * 100
+
 	return render(request, 'order_detail.html', 
 		{
 		'child_orders': children, 
 		'parent_order': parent, 
 		'average_price': average_price['price__avg'],
 		'total_price': total_price['price__sum'],
-		'total_sold': total_sold['quantity__sum']
+		'total_sold': total_sold['quantity__sum'],
+		'progress': progress
 		})

@@ -19,6 +19,7 @@
           <th>Sell</th>
           <th>Quantity</th>
           <th>Time</th>
+          <th>Progress</th>
         </tr>
       </thead>
       {% if orders %}
@@ -29,7 +30,12 @@
                         <td> <a href="{% url 'order_detail' order.id %}">{{ order.id }} </a>
                         <td> {{ order.is_sell }}
                         <td> {{ order.quantity }}
-                        <td> {{ order.time_executed }}
+                        <td class="col-md-3"> {{ order.time_executed }}
+                        <td class="col-md-3"> 
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="{{ order.progress }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ order.progress }}%"> {{ order.progress }}%
+                                </div>
+                            </div>
                     </tr>
                 {% endif %}
             {% endfor %}
