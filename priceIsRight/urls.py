@@ -25,6 +25,6 @@ urlpatterns = [
     # url(r'^register/$', custom_auth_views.register, name='register'),
     url(r'^login/$', auth_views.login, {'template_name': 'login.html', 'authentication_form': LoginForm}, name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page': '/login'}, name='logout'),
-    url(r'^stocks/$', views.index, name='stocks'),
+    url(r'^place-order/$', views.index, name='place-order'),
     url(r'^admin/', admin.site.urls),
 ]

@@ -47,12 +47,21 @@ class ParentOrder(models.Model):
 
 	def create_child(self, order, attempted_price):
 		if (order['avg_price'] == 0):
-			co = ChildOrder.objects.create(parent_order=self, quantity=order['qty'],
-										is_successful=False, price=attempted_price)
+
+			co = ChildOrder.objects.create(
+				parent_order=self, 
+				quantity = order['qty'],
+				is_successful=False, 
+				price=attempted_price
+			)
 		else:
-			co = ChildOrder.objects.create(parent_order=self, quantity=order['qty'],
-										is_successful=True, price=order['avg_price'])
-		print "child created: " 
+			co = ChildOrder.objects.create(
+				parent_order=self, 
+				quantity = order['qty'],
+				is_successful=True, 
+				price=order['avg_price']
+			)
+		print "child created: "
 		print co
 		co.save()
 		return co
@@ -88,10 +97,8 @@ class ParentOrder(models.Model):
 				child_order_size *= 2
 				number_of_successes = 0
 			time.sleep(N)
-
-
-
-
+		# DONE!
+		self.success = True
 
 @python_2_unicode_compatible
 class ChildOrder(models.Model):

@@ -2,17 +2,31 @@
 
 {% block content %}
 
-<h1>Salutations, {{ request.user }}</h1>
-<h1>These are all orders being worked on</h1>
+<h1>Salutations, {{ user }}</h1>
+<h1>Working Orders</h1>
 
 {% if orders %}
     <ul>
         {% for order in orders %}
-        <li>ID = {{ order.id }} Sell = {{ order.is_sell }} for this quantity: {{ order.quantity }}</li>
+        	{% if order.success == False %}
+        		<li>ID = {{ order.id }} Sell = {{ order.is_sell }} for this quantity: {{ order.quantity }}</li>
+        	{% endif %}
         {% endfor %}
     </ul>
 {% endif %}
 
-<a href="{% url 'stocks' %}">Place an Order</a>
+<h1>Completed Orders</h1>
+
+{% if orders %}
+    <ul>
+        {% for order in orders %}
+        	{% if order.success == True %}
+        		<li>ID = {{ order.id }} Sell = {{ order.is_sell }} for this quantity: {{ order.quantity }}</li>
+        	{% endif %}
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<a href="{% url 'place-order' %}">Place an Order</a>
 
 {% endblock %}
