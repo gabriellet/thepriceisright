@@ -25,7 +25,7 @@ class ParentOrder(models.Model):
 	
 	# checks if quantity is positive
 	def is_valid(self):
-		if self.quantity < 0:
+		if self.quantity <= 0:
 			return False
 		else:
 			return True
