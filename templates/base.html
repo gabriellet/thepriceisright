@@ -9,7 +9,7 @@
 	    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 	    <meta name="description" content="">
 	    <meta name="author" content="">
-	    <link rel="icon" href="../money.ico">
+	    <link rel="icon" href="{% static "money.ico" %}>
 
 	    <title>The Price Is Right</title>
 
@@ -35,7 +35,7 @@
 	          {% if user.is_authenticated %}
 	          <ul class="nav navbar-nav navbar-right">
 	            <li><a href="{% url 'index' %}">Home</a></li>
-	            <li><a href="{% url 'place-order' %}">Place Order</a></li>
+	            <li><a href="{% url 'place_order' %}">Place Order</a></li>
 	            <li><a href="{% url 'logout' %}">Logout</a></li>
 	          </ul>
 	          {% endif %}

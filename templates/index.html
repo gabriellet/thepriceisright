@@ -9,7 +9,6 @@
 
 {% block content %}
 
-<<<<<<< HEAD
   <h2 class="sub-header">Current Orders</h2>
 
   <div class="table-responsive">
@@ -27,7 +26,7 @@
             {% for order in orders %}
                 {% if order.success == False %}
                     <tr>
-                        <td> <a href="{% url 'order-detail' order.id %}">{{ order.id }} </a>
+                        <td> <a href="{% url 'order_detail' order.id %}">{{ order.id }} </a>
                         <td> {{ order.is_sell }}
                         <td> {{ order.quantity }}
                         <td> {{ order.time_executed }}
@@ -55,7 +54,7 @@
             {% for order in orders %}
                 {% if order.success == True %}
                     <tr>
-                        <td> <a href="{% url 'order-detail' order.id %}">{{ order.id }} </a>
+                        <td> <a href="{% url 'order_detail' order.id %}">{{ order.id }} </a>
                         <td> {{ order.is_sell }}
                         <td> {{ order.quantity }}
                         <td> {{ order.time_executed }}
