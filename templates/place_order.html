@@ -11,7 +11,7 @@
 
 <h2 class="sub-header">Craigslist For Stocks</h2>
 
-<form action="{% url 'place-order' %}" method="post">
+<form action="{% url 'place_order' %}" method="post">
 
 	{% csrf_token %}
 	<p>{{ form.quantity.label_tag }} {{ form.quantity }} x ACME ETF</p>

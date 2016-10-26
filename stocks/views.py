@@ -36,7 +36,7 @@ def index(request):
 @login_required(login_url="/")
 def order_detail(request, id):
 	try:
-		children = ChildOrder.objects.filter(parent_order__id=id)
+		children = ChildOrder.objects.filter(parent_order__id=id).order_by('-time_executed')
 	except ChildOrder.DoesNotExist:
 		raise Http404('No Child Orders')
 	context_dict = {'child_orders': children}
