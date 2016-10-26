@@ -44,11 +44,19 @@ class ParentOrder(models.Model):
 
 	def create_child(self, order, attempted_price):
 		if (order['avg_price'] == 0):
-			co = ChildOrder.objects.create(parent_order=self, quantity = order['qty']
-										is_successful=False, price=attempted_price)
+			co = ChildOrder.objects.create(
+				parent_order=self, 
+				quantity = order['qty'],
+				is_successful=False, 
+				price=attempted_price
+			)
 		else:
-			co = ChildOrder.objects.create(parent_order=self, quantity = order['qty']
-										is_successful=True, price=order['avg_price'])
+			co = ChildOrder.objects.create(
+				parent_order=self, 
+				quantity = order['qty'],
+				is_successful=True, 
+				price=order['avg_price']
+			)
 		print co
 		co.save()
 		return co
