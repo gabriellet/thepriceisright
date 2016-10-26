@@ -13,7 +13,7 @@ class ParentOrder(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	
 	# checks if quantity is positive
-	def valid_order(self):
+	def is_valid(self):
 		if self.quantity < 0:
 			return False
 		else:
