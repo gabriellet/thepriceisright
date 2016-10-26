@@ -1,6 +1,6 @@
 # thepriceisright
 
-**JP Morgan Chase Project**    
+### JP Morgan Chase Project  
 Group: ExceptionHandlers  
   
 Members: 
