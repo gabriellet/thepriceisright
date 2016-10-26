@@ -7,7 +7,7 @@
 <form action="{% url 'stocks' %}" method="post">
 
 	{% csrf_token %}
-	{{ form.as_p }}
+	<p>{{ form.quantity.label_tag }} {{ form.quantity }} x ACME ETF</p>
 
 	<input type="submit" value="Submit" />
 

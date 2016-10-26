@@ -16,13 +16,13 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
-from authentication.forms import LoginForm, UserForm
+from authentication.forms import LoginForm #, UserForm
 from stocks import views
 from authentication import views as custom_auth_views
 
 urlpatterns = [
     url(r'', include('authentication.urls')),
-    url(r'^register/$', custom_auth_views.register, name='register'),
+    # url(r'^register/$', custom_auth_views.register, name='register'),
     url(r'^login/$', auth_views.login, {'template_name': 'login.html', 'authentication_form': LoginForm}, name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page': '/login'}, name='logout'),
     url(r'^stocks/$', views.index, name='stocks'),
