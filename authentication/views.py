@@ -17,7 +17,6 @@ def index(request):
     			order.progress = (child_sold/order.quantity) * 100
     	else:
     		order.progress = 100
-    	print order.progress
     context_dict = {'orders': order_list}
 
     return render(request, "index.html", context_dict)
