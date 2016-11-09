@@ -22,3 +22,13 @@ Python 2.7
 Django 1.10.2  
 Bootstrap 3.3.7  
 
+# Dependencies
+Six
+Mock
+
+# To test
+./manage.py test
+OR if you want to test something specific
+
+./manage.py test <appname>.tests.TestClass.TestMethod
+

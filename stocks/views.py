@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.db.models import Avg, Sum
 
 from forms import ParentOrderForm
@@ -20,6 +20,8 @@ def index(request):
 				user = request.user)
 			if order.is_valid():
 				order.save()
+			else:
+				return HttpResponse("Invalid Order! Order quantity must be positive but below 1000")
 
 			t1 = Thread(target=order.trade)  # automatically try to execute trade upon submission
 			t1.daemon = True
