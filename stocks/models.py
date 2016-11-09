@@ -2,13 +2,14 @@ from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.contrib.auth.models import User
 import urllib2
+import datetime
 import time
 import json
 
 
 QUERY = "http://localhost:8080/query?id={}"
 ORDER = "http://localhost:8080/order?id={}&side=sell&qty={}&price={}"
-ORDER_DISCOUNT = 10
+ORDER_DISCOUNT = 1
 N = 5
 FAILURE_TOLERANCE = -3
 SUCCESS_TOLERANCE = 2
@@ -40,7 +41,7 @@ class ParentOrder(models.Model):
 	
 	# checks if quantity is positive
 	def is_valid(self):
-		if self.quantity <= 0 or self.quantity > 1000:
+		if self.quantity <= 0:
 			return False
 		else:
 			return True
@@ -72,11 +73,20 @@ class ParentOrder(models.Model):
 
 	def execute_sell(self, quantity, price):
 		url   = ORDER.format(self.id, quantity, price)
-		order = json.loads(urllib2.urlopen(url).read())
+		response = urllib2.urlopen(url).read()
+		if response == "":
+			order = {
+			u'timestamp': datetime.datetime.now(), 
+			u'qty': child_order_size, 
+			u'side': u'sell', 
+			u'avg_price': 0.0
+			}
+		else:
+			order = json.loads(response)
 		return order
 
 	def create_child(self, order, attempted_price):
-		if (order['avg_price'] == 0):
+		if (order['avg_price'] == 0.0):
 
 			co = ChildOrder.objects.create(
 				parent_order=self, 
@@ -122,10 +132,11 @@ class ParentOrder(models.Model):
 			if (quantity_to_sell < child_order_size):
 				child_order_size = quantity_to_sell  # make sure child order size never exceeds what we have left to sell
 			order = self.execute_sell(child_order_size, price)
+
 			self.create_child(order, price)
 
 			# logic for handling failure to sell
-			if (order['avg_price'] == 0):
+			if (order['avg_price'] == 0.0):
 				number_of_successes -= 1
 			else:
 				number_of_successes += 1

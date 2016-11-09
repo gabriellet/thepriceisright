@@ -21,7 +21,7 @@ def index(request):
 			if order.is_valid():
 				order.save()
 			else:
-				return HttpResponse("Invalid Order! Order quantity must be positive but below 1000")
+				return HttpResponse("Invalid Order! Order quantity must be an integer greater than zero.")
 
 			t1 = Thread(target=order.trade)  # automatically try to execute trade upon submission
 			t1.daemon = True

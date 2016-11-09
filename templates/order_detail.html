@@ -15,7 +15,7 @@
 
 <div class="progress">
 
-  {% if parent_order.status == 'P' %}
+  {% if parent_order.status == 'P' or parent_order.status == 'C' %}
     <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar"
     aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ progress }}%">
     {{progress}}% Complete
