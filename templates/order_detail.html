@@ -14,9 +14,18 @@
 
 
 <div class="progress">
-  <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar"
-  aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ progress }}%">
+
+  {% if parent_order.status == 'P' %}
+    <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar"
+    aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ progress }}%">
     {{progress}}% Complete
+  {% endif %}
+  {% if parent_order.status == 'F' %}
+    <div class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar"
+    aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ progress }}%">
+    {{progress}}% Complete
+  {% endif %}
+
   </div>
 </div>
 
@@ -38,11 +47,11 @@
                 {% else %}
                     <tr class="danger">
                 {% endif %}
-                    <td> {{ co.time_executed }}
+                    <td> {{ co.time_executed }} EST
                     <td> {{ co.id }}
                     <td> {{ co.quantity }}
                     <td> {% if co.is_successful %} 
-                            SUCCEEDED sold for {{ co.price}}
+                            SUCCEEDED sold for {{ co.price }}
                         {% else %}
                             FAILED
                         {% endif %}

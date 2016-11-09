@@ -25,15 +25,28 @@
       {% if orders %}
         <tbody>
             {% for order in orders %}
-                {% if order.status == 'P' or order.status == 'F' %}
+                {% if order.status == 'P' %}
                     <tr>
                         <td> <a href="{% url 'order_detail' order.id %}">{{ order.id }} </a>
                         <td> {{ order.is_sell }}
                         <td> {{ order.quantity }}
-                        <td class="col-md-3"> {{ order.time_executed }}
+                        <td class="col-md-3"> {{ order.time_executed }} EST
                         <td class="col-md-3"> 
                             <div class="progress">
                                 <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="{{ order.progress }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ order.progress }}%"> {{ order.progress }}%
+                                </div>
+                            </div>
+                    </tr>
+                {% endif %}
+                {% if order.status == 'F' %}
+                    <tr>
+                        <td> <a href="{% url 'order_detail' order.id %}">{{ order.id }} </a>
+                        <td> {{ order.is_sell }}
+                        <td> {{ order.quantity }}
+                        <td class="col-md-3"> {{ order.time_executed }} EST
+                        <td class="col-md-3"> 
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-danger progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%"> ERROR
                                 </div>
                             </div>
                     </tr>
@@ -63,7 +76,7 @@
                         <td> <a href="{% url 'order_detail' order.id %}">{{ order.id }} </a>
                         <td> {{ order.is_sell }}
                         <td> {{ order.quantity }}
-                        <td> {{ order.time_executed }}
+                        <td> {{ order.time_executed }} EST
                     </tr>
                 {% endif %}
             {% endfor %}
