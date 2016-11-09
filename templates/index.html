@@ -38,19 +38,6 @@
                             </div>
                     </tr>
                 {% endif %}
-                {% if order.status == 'C' %}
-                    <tr>
-                        <td> <a href="{% url 'order_detail' order.id %}">{{ order.id }} </a>
-                        <td> {{ order.is_sell }}
-                        <td> {{ order.quantity }}
-                        <td class="col-md-3"> {{ order.time_executed }} EST
-                        <td class="col-md-3"> 
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-success progress-bar" role="progressbar" aria-valuenow="{{ order.progress }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ order.progress }}%"> {{ order.progress }}%
-                                </div>
-                            </div>
-                    </tr>
-                {% endif %}
                 {% if order.status == 'F' %}
                     <tr>
                         <td> <a href="{% url 'order_detail' order.id %}">{{ order.id }} </a>
