@@ -17,6 +17,11 @@ Current version in bold. For detailed version history see Wiki.
 ### Usage
 `python manage.py runserver`  
 
+### Database Migrations
+`python manage.py makemigrations`
+
+`python manage.py migrate`
+
 ### Framework Versions
 Python 2.7  
 Django 1.10.2  
@@ -27,8 +32,9 @@ Six
 Mock
 
 # To test
-./manage.py test
+`./manage.py test`
+
 OR if you want to test something specific
 
-./manage.py test <appname>.tests.TestClass.TestMethod
+`./manage.py test <appname>.tests.TestClass.TestMethod`
 
