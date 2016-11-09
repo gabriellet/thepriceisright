@@ -107,3 +107,12 @@ body {
   display: inline-block;
   border-radius: 50%;
 }
+
+/*
+ * Hey now the modal isn't wierd yay
+ */
+.modal {
+    transform: translate(0, 30%) !important;
+  -ms-transform: translate(0, 30%) !important; /* IE 9 */
+  -webkit-transform: translate(0, 30%) !important; /* Safari and Chrome */
+}
