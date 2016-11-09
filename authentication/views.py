@@ -9,14 +9,15 @@ from stocks.models import ParentOrder, ChildOrder
 def index(request):
     order_list = ParentOrder.objects.all().order_by('-time_executed')
     for order in order_list:
-    	if order.success == False:
+    	if order.status == ParentOrder.IN_PROGRESS or order.status == ParentOrder.FAILED:
     		child_sold = ChildOrder.objects.filter(parent_order=order.id).aggregate(Sum('quantity'))['quantity__sum']
     		if child_sold == None:
-    			order.progress = 100
+    			order.progress = 100  # Why this logic jackie?
     		else:
-    			order.progress = (child_sold/order.quantity) * 100
+    			order.progress = (float(child_sold)/float(order.quantity)) * 100
     	else:
     		order.progress = 100
+
     context_dict = {'orders': order_list}
 
     return render(request, "index.html", context_dict)
