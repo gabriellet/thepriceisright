@@ -42,7 +42,6 @@ def order_detail(request, id):
 		children = ChildOrder.objects.filter(parent_order__id=id).order_by('-time_executed')
 	except ChildOrder.DoesNotExist:
 		raise Http404('No Child Orders')
-	context_dict = {'child_orders': children}
 
 	parent = get_object_or_404(ParentOrder, id=id)
 	
@@ -51,9 +50,9 @@ def order_detail(request, id):
 	total_sold = children.aggregate(Sum('quantity'))
 
 	if total_sold['quantity__sum'] == None:
-		progress = 100
+		progress = 0.0
 	else:
-		progress = (total_sold['quantity__sum']/parent.quantity) * 100
+		progress = (float(total_sold['quantity__sum'])/float(parent.quantity)) * 100
 
 	return render(request, 'order_detail.html', 
 		{

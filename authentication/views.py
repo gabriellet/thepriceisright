@@ -12,11 +12,11 @@ def index(request):
     	if order.status == ParentOrder.IN_PROGRESS or order.status == ParentOrder.FAILED:
     		child_sold = ChildOrder.objects.filter(parent_order=order.id).aggregate(Sum('quantity'))['quantity__sum']
     		if child_sold == None:
-    			order.progress = 100  # Why this logic jackie?
+    			order.progress = 0.0  # Why this logic jackie? # there was no logic it was 4am
     		else:
     			order.progress = (float(child_sold)/float(order.quantity)) * 100
     	else:
-    		order.progress = 100
+    		order.progress = 100.0
 
     context_dict = {'orders': order_list}
 
