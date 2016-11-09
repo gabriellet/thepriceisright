@@ -101,7 +101,7 @@ class ParentOrder(models.Model):
 
 	def trade(self):
 		if not self.is_valid():
-			print "Problem, someone created a bad parent order that shouldnt even be here"
+			print "Problem, someone created a bad parent order that shouldn't even be here"
 			return  # This code should never be reached, since if an order is not valid, we don't even create it
 
 		number_of_successes = 0
