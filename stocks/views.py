@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
-from django.db.models import Avg, Sum
+from django.db.models import Sum, F
 
 from forms import ParentOrderForm
 from models import ParentOrder, ChildOrder
@@ -45,9 +45,8 @@ def order_detail(request, id):
 
 	parent = get_object_or_404(ParentOrder, id=id)
 	
-	average_price = children.aggregate(Avg('price'))
-	total_price = children.aggregate(Sum('price'))
-	total_sold = children.aggregate(Sum('quantity'))
+	total_price = children.filter(is_successful=True).aggregate(total=Sum(F('price') * F('quantity')))
+	total_sold = children.filter(is_successful=True).aggregate(Sum('quantity'))
 
 	if total_sold['quantity__sum'] == None:
 		progress = 0.0
@@ -58,8 +57,8 @@ def order_detail(request, id):
 		{
 		'child_orders': children, 
 		'parent_order': parent, 
-		'average_price': average_price['price__avg'],
-		'total_price': total_price['price__sum'],
-		'total_sold': total_sold['quantity__sum'],
+		'average_price': '{:,.2f}'.format(total_price['total']/total_sold['quantity__sum']),
+		'total_price': '{:,.2f}'.format(total_price['total']),
+		'total_sold': '{:,d}'.format(total_sold['quantity__sum']),
 		'progress': progress
 		})

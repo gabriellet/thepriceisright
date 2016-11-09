@@ -77,7 +77,7 @@ class ParentOrder(models.Model):
 		if response == "":
 			order = {
 			u'timestamp': datetime.datetime.now(), 
-			u'qty': child_order_size, 
+			u'qty': quantity, 
 			u'side': u'sell', 
 			u'avg_price': 0.0
 			}
