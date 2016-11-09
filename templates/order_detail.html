@@ -12,7 +12,6 @@
 <h2 class="sub-header">Order: {{ parent_order.quantity }} x {{ parent_order.stock_type }}</h2>
 <p> <b>Average Price:</b> {{ average_price }}, <b>Gross Sale Price:</b> {{ total_price }}, <b>Total Quantity Sold:</b> {{ total_sold }} </p>
 
-
 <div class="progress">
 
   {% if parent_order.status == 'P' %}

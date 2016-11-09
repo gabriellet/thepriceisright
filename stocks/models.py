@@ -98,6 +98,10 @@ class ParentOrder(models.Model):
 				is_successful=True, 
 				price=order['avg_price']
 			)
+
+			self.progress += (order['qty']/self.quantity) * 100
+			# print self.progress
+
 		print "child created: "
 		print co
 		co.save()
