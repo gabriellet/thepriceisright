@@ -38,6 +38,7 @@ class ParentOrder(models.Model):
 		default=IN_PROGRESS
 	)
 
+	progress = models.FloatField(blank=False, default=0.0)
 	
 	# checks if quantity is positive
 	def is_valid(self):
@@ -54,10 +55,6 @@ class ParentOrder(models.Model):
 		if price is None:
 			return False
 		return True
-
-
-	def __str__(self):
-		return str(self.id) + ": " + str(self.quantity) + " x " + self.stock_type + ' status:' + self.status
 
 	def query_market_price(self, number_of_tries=10):
 		quote = json.loads(urllib2.urlopen(QUERY.format(self.id)).read())
@@ -105,9 +102,6 @@ class ParentOrder(models.Model):
 		print co
 		co.save()
 		return co
-
-	def get_progress(self):
-		return
 
 	def trade(self):
 		if not self.is_valid():
@@ -160,6 +154,9 @@ class ParentOrder(models.Model):
 		# DONE with while loop!
 		self.status = self.COMPLETED
 		self.save() # we forgot to save after setting self.success=True. The update() function solves this
+
+	def __str__(self):
+		return str(self.id) + ": " + str(self.quantity) + " x " + self.stock_type + ' status:' + self.status
 
 @python_2_unicode_compatible
 class ChildOrder(models.Model):
