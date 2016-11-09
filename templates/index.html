@@ -78,7 +78,7 @@
                         <td> {{ order.is_sell }}
                         <td> {{ order.quantity }}
                         <td> {{ order.time_executed }} EST
-                        <td> AVG
+                        <td> {{ order.avg_price }}
                     </tr>
                 {% endif %}
             {% endfor %}
