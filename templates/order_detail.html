@@ -42,7 +42,7 @@
           <th>Child Order Number</th>
           <th>Quantity</th>
           <th>Status</th>
-          <th>Price</th>
+          <th>Attempted Price</th>
         </tr>
       </thead>
         {% if child_orders %}
@@ -61,7 +61,7 @@
                         {% else %}
                             FAILED
                         {% endif %}
-                    <td> Attempted {{ co.price }}
+                    <td> {{ co.price }}
 
                 </tr>
             {% endfor %}
