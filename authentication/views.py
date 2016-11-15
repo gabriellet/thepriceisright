@@ -13,14 +13,17 @@ def index(request):
         child_sold = child_sold['quantity__sum']
 
     	# if order.status == ParentOrder.IN_PROGRESS or order.status == ParentOrder.FAILED:
-        if child_sold == None:
+        if child_sold is None:
 			order.progress = 0.0  # Why this logic jackie? # there was no logic it was 4am
         else:
 			order.progress = (float(child_sold)/float(order.quantity)) * 100
         
         total_price = ChildOrder.objects.filter(parent_order=order.id).filter(is_successful=True).aggregate(total=Sum(F('price') * F('quantity')))
         total_price = total_price['total']
-        order.avg_price = '{:,.2f}'.format(total_price/child_sold)
+        if total_price is None:
+            order.avg_price = 0.0
+        else:
+            order.avg_price = '{:,.2f}'.format(total_price/child_sold)
 
     	# else:
     	# 	order.progress = 100.0
