@@ -27,9 +27,9 @@ Python 2.7
 Django 1.10.2  
 Bootstrap 3.3.7  
 
-# Dependencies
-Six
-Mock
+# Testing Dependencies
+Six 1.1.0   
+Mock 2.0.0   
 
 # To test
 `./manage.py test`
