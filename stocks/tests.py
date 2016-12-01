@@ -47,6 +47,7 @@ class ParentOrderTestCase(TestCase):
         small_order.create_child.assert_called_once_with(fake_order, 90) # 90 here because price = market_price - 10
         # successfully created a child
 
-
+    def parent_order_can_pause_and_resume(self):
+        return True
 
 

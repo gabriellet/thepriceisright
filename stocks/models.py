@@ -152,9 +152,11 @@ class ParentOrder(models.Model):
 			price -= ORDER_DISCOUNT  # query is successful, update price accordingly
 			if (quantity_to_sell < child_order_size):
 				child_order_size = quantity_to_sell  # make sure child order size never exceeds what we have left to sell
+
+			self.refresh_from_db()  # refresh before checking if paused or cancelled
 			if (self.status == self.PAUSED or self.status == self.CANCELLED):
 				return
-
+				
 			order = self.execute_sell(child_order_size, price)
 			self.create_child(order, price)
 
