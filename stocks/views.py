@@ -79,6 +79,12 @@ def order_detail(request, id):
 		'progress': progress
 		})
 
+def get_progress(request, id):
+	parent = get_object_or_404(ParentOrder, id=id)
+	current_progress = '{:,.2f}'.format(parent.progress)
+	return HttpResponse(current_progress)
+
+
 def pause_order(request, id):
 	parent = get_object_or_404(ParentOrder, id=id)
 	parent.status = ParentOrder.PAUSED
