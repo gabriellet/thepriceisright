@@ -21,6 +21,9 @@ def index(request):
 					user = request.user)
 				if order.is_valid():
 					order.save()
+					api_response = order.query_market_datetime()
+					order.time_executed = api_response
+					order.save()  #second time is to save timestamp
 				else:
 					# TODO
 					return HttpResponse("Invalid Order! Order quantity must be an integer greater than zero.")
@@ -53,9 +56,12 @@ def order_detail(request, id):
 
 			print status_change
 
-			parent = get_object_or_404(ParentOrder, id=id)
-			parent.status = status_change
-			parent.save()
+			if status_change == 'P':
+				resume_order(request, id)
+			elif status_change == 'S':
+				pause_order(request, id)
+			elif status_change == 'X':
+				cancel_order(request, id)
 
 		else:
 			# TODO
@@ -98,17 +104,23 @@ def order_detail(request, id):
 		'form': form
 		})
 
-# def pause_order(request, id):
-# 	parent = get_object_or_404(ParentOrder, id=id)
-# 	parent.status = ParentOrder.PAUSED
-# 	parent.save()
+def pause_order(request, id):
+	parent = get_object_or_404(ParentOrder, id=id)
+	parent.status = ParentOrder.PAUSED
+	parent.save()
 
-# def resume_order(request, id):
-# 	parent = get_object_or_404(ParentOrder, id=id)
-# 	parent.status = ParentOrder.IN_PROGRESS
-# 	parent.save()
+def cancel_order(request, id):
+	parent = get_object_or_404(ParentOrder, id=id)
+	parent.status = ParentOrder.CANCELLED
+	parent.save()
 
-# def cancel_order(request, id):
-# 	parent = get_object_or_404(ParentOrder, id=id)
-# 	parent.status = ParentOrder.CANCELLED
-# 	parent.save()
+def resume_order(request, id):
+	parent = get_object_or_404(ParentOrder, id=id)
+	if(parent.status != ParentOrder.PAUSED):  # We can only resume orders that are paused
+		return False
+	parent.status = ParentOrder.IN_PROGRESS
+	parent.save()
+	t1 = Thread(target=order.trade)  # automatically try to execute trade upon submission
+	t1.daemon = True
+	t1.start()
+	return redirect('index')
