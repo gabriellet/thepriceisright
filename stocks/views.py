@@ -13,23 +13,30 @@ def index(request):
 		form = ParentOrderForm(request.POST)
 
 		if form.is_valid():
-			order = ParentOrder(
-				quantity = form.cleaned_data['quantity'], 
-				stock_type = "ACME ETF", 
-				is_sell = True,
-				user = request.user)
-			if order.is_valid():
-				order.save()
-			else:
-				return HttpResponse("Invalid Order! Order quantity must be an integer greater than zero.")
+			try:
+				order = ParentOrder(
+					quantity = form.cleaned_data['quantity'], 
+					stock_type = "ACME ETF", 
+					is_sell = True,
+					user = request.user)
+				if order.is_valid():
+					order.save()
+				else:
+					# TODO
+					return HttpResponse("Invalid Order! Order quantity must be an integer greater than zero.")
 
-			t1 = Thread(target=order.trade)  # automatically try to execute trade upon submission
-			t1.daemon = True
-			t1.start()
-			return redirect('index')
+				t1 = Thread(target=order.trade)  # automatically try to execute trade upon submission
+				t1.daemon = True
+				t1.start()
+				return redirect('index')
+
+			except:
+				# TODO
+				return HttpResponse("Invalid Order!")
 
 		else:
-			print form.errors
+			# TODO
+			return HttpResponse("Form not Valid")
 
 	else:
 		form = ParentOrderForm()
