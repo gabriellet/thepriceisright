@@ -82,8 +82,11 @@ class ParentOrder(models.Model):
 			number_of_tries -= 1
 			if number_of_tries == 0:  # no tries left, we give up querying and selling
 				return False
-		datetime = quote['timestamp']
-		return datetime
+		d = quote['timestamp']
+		FORMAT = '%Y-%m-%d %H:%M:%S.%f'
+		dt = datetime.datetime.strptime(d, FORMAT)
+		print type(dt)
+		return dt
 
 	def execute_sell(self, quantity, price):
 		url   = ORDER.format(self.id, quantity, price)
@@ -114,9 +117,8 @@ class ParentOrder(models.Model):
 				is_successful=True, 
 				price=order['avg_price']
 			)
-
 			self.progress += (order['qty']/self.quantity) * 100
-			# print self.progress
+			self.save()
 
 		co.time_executed = order['timestamp']
 		co.save()

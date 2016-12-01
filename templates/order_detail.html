@@ -24,9 +24,8 @@
       {% if parent_order.status == 'F' %} 
           progress-bar-danger progress-bar-striped active
       {% endif %}" role="progressbar"
-    aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ progress }}%">
+    aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%">
     <!-- {{progress}}% Complete -->
-
 
   </div>
 </div>
@@ -68,17 +67,20 @@
 </div>
 
 <script language="javascript" type="text/javascript">
+var timer;
+var newprogress;
 function loadProgress(){
-    // $('#progress').load("/order/{{ co.time_executed }}/get_progress" );
-    $.get("/order/{{ co.time_executed }}/get_progress", function( newprogress ) {
+    $.get("/order/{{ parent_order.id }}/get_progress", function( newprogress ) {
+      $('#progress').attr('aria-valuenow', parseFloat(newprogress)).css('width',parseFloat(newprogress)+'%');
+      if (newprogress == 100.00 ) {
+        clearInterval(timer)
+      }
     });
-    $('#progress').attr('aria-valuenow', newprogress).css('width',newprogress+'%');
 }
 
 loadProgress(); // This will run on page load
-setInterval(function(){
-    loadProgress() // this will run after every 5 seconds
-}, 5000);
+timer = setInterval(function(){ loadProgress() }, 2000); // get progress every two seconds
+
 </script>
 
 {% endblock %}
