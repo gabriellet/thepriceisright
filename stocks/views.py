@@ -54,7 +54,7 @@ def order_detail(request, id):
 		if form.is_valid():
 			status_change = form.cleaned_data['status']
 
-			print status_change
+			# print status_change
 
 			if status_change == 'P':
 				resume_order(request, id)

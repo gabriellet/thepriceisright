@@ -25,7 +25,14 @@
       </form>
       <button type="submit" form="pause">Pause</button>
     {% endif %}
-  {% endif %} </h2>
+  {% endif %} 
+  <form id="cancel" action="{% url 'order_detail' parent_order.id %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="status" value="X">
+  </form>
+  <button type="submit" form="cancel">Cancel</button>
+</h2>
+  
 <p> <b>Average Price:</b> {{ average_price }}, <b>Gross Sale Price:</b> {{ total_price }}, <b>Total Quantity Sold:</b> {{ total_sold }} </p>
 
 <div class="progress">
