@@ -26,10 +26,14 @@ class ParentOrder(models.Model):
 	IN_PROGRESS = 'P'
 	COMPLETED = 'C'
 	FAILED = 'F'
+	PAUSED = 'S'
+	CANCELLED = 'X'
 	STATUS_CHOICES = (
 		(IN_PROGRESS, 'In Progress'),
 		(COMPLETED, 'Completed'),
-		(FAILED, 'Failed')	
+		(FAILED, 'Failed'),
+		(PAUSED, 'Paused'),
+		(CANCELLED, 'Cancelled')	
 	)
 
 	status = models.CharField(
@@ -107,6 +111,12 @@ class ParentOrder(models.Model):
 		co.save()
 		return co
 
+
+	def determine_quantity_to_sell(self):
+		quantity_sold_so_far = ChildOrder.objects.filter(parent_order=order.id).filter(is_successful=True).aggregate(total=Sum(F('quantity')))
+		quantity_left_to_sell = self.quantity - quantity_sold_so_far
+		return quantity_left_to_sell
+
 	def trade(self):
 		if not self.is_valid():
 			print "Problem, someone created a bad parent order that shouldn't even be here"
@@ -118,10 +128,10 @@ class ParentOrder(models.Model):
 		else:
 			maximum_child_size = self.quantity / 10  # hardcoded to split by 10%
 		child_order_size = maximum_child_size
-		quantity_to_sell = self.quantity
+		quantity_to_sell = self.determine_quantity_to_sell()
 
 		while quantity_to_sell > 0:
-			price = self.query_market_price() 
+			price = self.query_market_price()
 			if price is False:
 				self.status = self.FAILED
 				self.save()
@@ -129,8 +139,10 @@ class ParentOrder(models.Model):
 			price -= ORDER_DISCOUNT  # query is successful, update price accordingly
 			if (quantity_to_sell < child_order_size):
 				child_order_size = quantity_to_sell  # make sure child order size never exceeds what we have left to sell
-			order = self.execute_sell(child_order_size, price)
+			if (self.status == self.PAUSED or self.status == self.CANCELLED):
+				return
 
+			order = self.execute_sell(child_order_size, price)
 			self.create_child(order, price)
 
 			# logic for handling failure to sell

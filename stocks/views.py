@@ -71,3 +71,13 @@ def order_detail(request, id):
 		'total_sold': '{:,d}'.format(total_sold),
 		'progress': progress
 		})
+
+def pause_order(request, id):
+	parent = get_object_or_404(ParentOrder, id=id)
+	parent.status = ParentOrder.PAUSED
+	parent.save()
+
+def cancel_order(request, id):
+	parent = get_object_or_404(ParentOrder, id=id)
+	parent.status = ParentOrder.CANCELLED
+	parent.save()
