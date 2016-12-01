@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
 from django.db.models import Sum, F
 
-from forms import ParentOrderForm
+from forms import ParentOrderForm, PauseResumeForm
 from models import ParentOrder, ChildOrder
 from threading import Thread
 
@@ -45,6 +45,24 @@ def index(request):
 
 @login_required(login_url="/")
 def order_detail(request, id):
+	if request.method == 'POST':
+		form = PauseResumeForm(request.POST)
+
+		if form.is_valid():
+			status_change = form.cleaned_data['status']
+
+			print status_change
+
+			parent = get_object_or_404(ParentOrder, id=id)
+			parent.status = status_change
+			parent.save()
+
+		else:
+			# TODO
+			return HttpResponse("Form not Valid")
+
+	# else:
+	form = PauseResumeForm()
 	try:
 		children = ChildOrder.objects.filter(parent_order__id=id).order_by('-time_executed')
 	except ChildOrder.DoesNotExist:
@@ -76,15 +94,21 @@ def order_detail(request, id):
 		'average_price': avg_price,
 		'total_price': '{:,.2f}'.format(total_price),
 		'total_sold': '{:,d}'.format(total_sold),
-		'progress': progress
+		'progress': progress,
+		'form': form
 		})
 
-def pause_order(request, id):
-	parent = get_object_or_404(ParentOrder, id=id)
-	parent.status = ParentOrder.PAUSED
-	parent.save()
+# def pause_order(request, id):
+# 	parent = get_object_or_404(ParentOrder, id=id)
+# 	parent.status = ParentOrder.PAUSED
+# 	parent.save()
 
-def cancel_order(request, id):
-	parent = get_object_or_404(ParentOrder, id=id)
-	parent.status = ParentOrder.CANCELLED
-	parent.save()
+# def resume_order(request, id):
+# 	parent = get_object_or_404(ParentOrder, id=id)
+# 	parent.status = ParentOrder.IN_PROGRESS
+# 	parent.save()
+
+# def cancel_order(request, id):
+# 	parent = get_object_or_404(ParentOrder, id=id)
+# 	parent.status = ParentOrder.CANCELLED
+# 	parent.save()

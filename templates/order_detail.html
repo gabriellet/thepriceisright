@@ -9,7 +9,23 @@
 
 {% block content %}
 
-<h2 class="sub-header">Order: {{ parent_order.quantity }} x {{ parent_order.stock_type }}</h2>
+<h2 class="sub-header">Order: {{ parent_order.quantity }} x {{ parent_order.stock_type }} 
+  {% if parent_order.status != 'C' and parent_order.status != 'X' %} 
+    {% if parent_order.status == 'S' %} 
+      <form id="resume" action="{% url 'order_detail' parent_order.id %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="status" value="P">
+      </form>
+      <button type="submit" form="resume">Resume</button>
+    {% endif %}
+    {% if parent_order.status == 'P' %} 
+      <form id="pause" action="{% url 'order_detail' parent_order.id %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="status" value="S">
+      </form>
+      <button type="submit" form="pause">Pause</button>
+    {% endif %}
+  {% endif %} </h2>
 <p> <b>Average Price:</b> {{ average_price }}, <b>Gross Sale Price:</b> {{ total_price }}, <b>Total Quantity Sold:</b> {{ total_sold }} </p>
 
 <div class="progress">
