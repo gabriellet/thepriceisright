@@ -10,21 +10,18 @@ class ParentOrderTestCase(TestCase):
     def setUp(self):
     	u = User.objects.create(username="LIN",password='linisawesome')
         ParentOrder.objects.create(stock_type="ACME", is_sell=True, quantity=1000, user=u)
-        ParentOrder.objects.create(stock_type="negative", is_sell=True, quantity=-1, user=u)  # broken test, negative numbers not allowed
-        ParentOrder.objects.create(stock_type="too_big", is_sell=True, quantity=99999, user=u)  # broken test, negative numbers not allowed
-        ParentOrder.objects.create(stock_type="zero", is_sell=True, quantity=0, user=u)  # broken test, negative numbers not allowed
-        ParentOrder.objects.create(stock_type="small", is_sell=True, quantity=1, user=u)  # broken test, negative numbers not allowed
+        ParentOrder.objects.create(stock_type="negative", is_sell=True, quantity=-1, user=u)  # broken case, negative numbers not allowed
+        ParentOrder.objects.create(stock_type="zero", is_sell=True, quantity=0, user=u)  # broken case, negative numbers not allowed
+        ParentOrder.objects.create(stock_type="small", is_sell=True, quantity=1, user=u)  # broken case, negative numbers not allowed
 
 
-    def test_order_quantity_is_positive_and_not_too_big(self):
+    def test_order_quantity_is_positive_number(self):
         working_order = ParentOrder.objects.get(stock_type="ACME")
         negative_order = ParentOrder.objects.get(stock_type="negative")
         zero_order = ParentOrder.objects.get(stock_type="zero")
-        too_big_order = ParentOrder.objects.get(stock_type="too_big")
         self.assertTrue(working_order.is_valid())
         self.assertFalse(negative_order.is_valid())
         self.assertFalse(zero_order.is_valid())
-        self.assertFalse(too_big_order.is_valid())
 
     def parent_order_fails_correctly_if_exchange_simulator_returns_bad_response(self):
         working_order = ParentOrder.objects.get(stock_type="ACME")
