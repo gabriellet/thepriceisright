@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.contrib.auth.models import User
+from django.db.models import Sum, F
+
 import urllib2
 import datetime
 import time
@@ -72,12 +74,23 @@ class ParentOrder(models.Model):
 		print "Quoted at %s" % price
 		return price
 
+	def query_market_datetime(self, number_of_tries=10):
+		quote = json.loads(urllib2.urlopen(QUERY.format(self.id)).read())
+		while not self.verify_market_price(quote):  # We failed to verify, the exchange simulator returned a bad response
+			quote = json.loads(urllib2.urlopen(QUERY.format(self.id)).read())
+			time.sleep(5)  # sleep 5 seconds before trying again
+			number_of_tries -= 1
+			if number_of_tries == 0:  # no tries left, we give up querying and selling
+				return False
+		datetime = quote['timestamp']
+		return datetime
+
 	def execute_sell(self, quantity, price):
 		url   = ORDER.format(self.id, quantity, price)
 		response = urllib2.urlopen(url).read()
 		if response == "":
 			order = {
-			u'timestamp': datetime.datetime.now(), 
+			u'timestamp': self.query_market_datetime(),
 			u'qty': quantity, 
 			u'side': u'sell', 
 			u'avg_price': 0.0
@@ -88,7 +101,6 @@ class ParentOrder(models.Model):
 
 	def create_child(self, order, attempted_price):
 		if (order['avg_price'] == 0.0):
-
 			co = ChildOrder.objects.create(
 				parent_order=self, 
 				quantity = order['qty'],
@@ -106,14 +118,15 @@ class ParentOrder(models.Model):
 			self.progress += (order['qty']/self.quantity) * 100
 			# print self.progress
 
-		print "child created: "
-		print co
+		co.time_executed = order['timestamp']
 		co.save()
 		return co
 
-
 	def determine_quantity_to_sell(self):
-		quantity_sold_so_far = ChildOrder.objects.filter(parent_order=order.id).filter(is_successful=True).aggregate(total=Sum(F('quantity')))
+		successful_children = ChildOrder.objects.filter(parent_order=self.id).filter(is_successful=True)
+		quantity_sold_so_far = 0
+		for child in successful_children:
+			quantity_sold_so_far += child.quantity
 		quantity_left_to_sell = self.quantity - quantity_sold_so_far
 		return quantity_left_to_sell
 
