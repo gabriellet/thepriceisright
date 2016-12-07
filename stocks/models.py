@@ -53,14 +53,14 @@ class ParentOrder(models.Model):
 		else:
 			return True
 
-	def get_total_price(self, children):
+	def get_total_price_sold(self, children):
 		total_price = (children.filter(is_successful=True).aggregate(total=Sum(F('price') * F('quantity'))))['total']
 		if total_price is None:
 			return 0.0
 		else:
 			return total_price
 
-	def get_total_quantity(self, children):
+	def get_total_quantity_sold(self, children):
 		total_quantity = (children.filter(is_successful=True).aggregate(Sum('quantity')))['quantity__sum']
 		if total_quantity is None:
 			return 0
@@ -71,12 +71,19 @@ class ParentOrder(models.Model):
 		if len(children) == 0:
 			return {'total_price': 0.0, 'total_quantity': 0, 'average_price': 0.0}
 		
-		total_price = self.get_total_price(children)
-		total_quantity = self.get_total_quantity(children)
+		total_price = self.get_total_price_sold(children)
+		total_quantity = self.get_total_quantity_sold(children)
 		if total_price == 0.0:
 			return {'total_price': total_price, 'total_quantity': total_quantity, 'average_price': 0.0}
 		else:
 			return {'total_price': total_price, 'total_quantity': total_quantity, 'average_price': total_price/total_quantity}
+
+	def update_progress(self):
+		children = ChildOrder.objects.filter(parent_order__id=self.id)
+		quantity_sold = self.get_total_quantity_sold(children)
+
+		self.progress = (float(quantity_sold)/float(self.quantity)) * 100
+		self.save()
 
 	def verify_market_price(self, price_json):
 		top_bid = price_json.get('top_bid')
@@ -144,6 +151,12 @@ class ParentOrder(models.Model):
 			)
 			self.progress += (order['qty']/self.quantity) * 100
 			self.save()
+
+			# self.update_progress()
+			# print "==========="
+			# print "PROGRESS"
+			# print self.progress
+			# print "==========="
 
 		co.time_executed = order['timestamp']
 		co.save()
