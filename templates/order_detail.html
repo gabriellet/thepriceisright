@@ -37,6 +37,7 @@
 
 <div class="progress">
 
+<<<<<<< HEAD
   <div id="progress-{{parent_order.id}}" data-id="{{order.id}}" class="progress-bar 
       {% if parent_order.status == 'P' %} 
           progress-bar-success progress-bar-striped active
@@ -49,39 +50,57 @@
       {% endif %}" role="progressbar"
     aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" style="min-width:4em; width:{{progress}}%">
     {{progress}}%
+=======
+  {% if parent_order.status == 'P' %}
+    <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar"
+    aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ progress }}%">
+    {{progress}}% Complete
+  {% endif %}
+  {% if parent_order.status == 'C' %}
+    <div class="progress-bar progress-bar-success progress-bar" role="progressbar"
+    aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ progress }}%">
+    {{progress}}% Complete
+  {% endif %}
+  {% if parent_order.status == 'F' %}
+    <div class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar"
+    aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ progress }}%">
+    {{progress}}% Complete
+  {% endif %}
+>>>>>>> 44a7ced443a3b38b9bb2ae2c588ad832afe79fc9
 
   </div>
 </div>
 
 <div class="table-responsive">
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Time</th>
-        <th>Child Order Number</th>
-        <th>Quantity</th>
-        <th>Status</th>
-        <th>Attempted Price</th>
-      </tr>
-    </thead>
-      {% if child_orders %}
-      <tbody>
-          {% for co in child_orders %}
-              {% if co.is_successful %} 
-                  <tr class="success">
-              {% else %}
-                  <tr class="danger">
-              {% endif %}
-                  <td> {{ co.time_executed }} EST
-                  <td> {{ co.id }}
-                  <td> {{ co.quantity }}
-                  <td> {% if co.is_successful %} 
-                          SUCCEEDED
-                      {% else %}
-                          FAILED
-                      {% endif %}
-                  <td> {{ co.price }}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Time</th>
+          <th>Child Order Number</th>
+          <th>Quantity</th>
+          <th>Status</th>
+          <th>Attempted Price</th>
+        </tr>
+      </thead>
+        {% if child_orders %}
+        <tbody>
+            {% for co in child_orders %}
+                {% if co.is_successful %} 
+                    <tr class="success">
+                {% else %}
+                    <tr class="danger">
+                {% endif %}
+                    <td> {{ co.time_executed }} EST
+                    <td> {{ co.id }}
+                    <td> {{ co.quantity }}
+                    <td> {% if co.is_successful %} 
+                            SUCCEEDED
+                        {% else %}
+                            FAILED
+                        {% endif %}
+                    <td> {{ co.price }}
 
+<<<<<<< HEAD
               </tr>
           {% endfor %}
       </tbody>
@@ -93,5 +112,13 @@
 var parent_order_id = [{{ parent_order.id }}];
 </script>
 <script src="{% static "js/progress.js" %}" language="javascript" type="text/javascript"></script>
+=======
+                </tr>
+            {% endfor %}
+        </tbody>
+        {% endif %}
+    </table>
+  </div>
+>>>>>>> 44a7ced443a3b38b9bb2ae2c588ad832afe79fc9
 
 {% endblock %}

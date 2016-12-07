@@ -2,9 +2,11 @@
 var timer;
 
 function progressBar() {
+
 	var remove = false;
 
 	function loadProgress(id){
+		var r;
 		var newprogress;
 		var newstatus;
 		var pg;
@@ -12,7 +14,8 @@ function progressBar() {
 		var progress_url = "/order/" + id + "/get_progress";
 		var status_url = "/order/" + id + "/get_status";
 
-		// get current order status
+		// get current order status, set progress bar color, etc
+		r = false;
 		$.get(status_url, function( newstatus ) {
 		  switch (newstatus) {
 		  	case 'P': //in progress
@@ -20,6 +23,8 @@ function progressBar() {
 		  		break;
 		  	case 'C': //completed
 		  		pg = 'progress-bar progress-bar-success progress-bar';
+		  		r = true;
+		  		console.log("you fucker this is r: " + r);
 		  		break;
 		  	case 'F': //failed
 		  		pg = 'progress-bar progress-bar-danger progress-bar';
@@ -37,11 +42,11 @@ function progressBar() {
 		// get current order progress
 	    $.get(progress_url, function( newprogress ) {
 	      $(selector).attr('aria-valuenow', parseFloat(newprogress)).css('width',parseFloat(newprogress)+'%');
-	      if (newprogress == 100.00) {
-	        remove = true;
-	      }
 	      $(selector).html(newprogress+'%');
 	    });
+
+	    console.log("returning r " + r);
+	    return r;
 	}
 
 	// if no more in progress orders exist, stop polling
@@ -51,7 +56,7 @@ function progressBar() {
 		// otherwise update progress bars
 		for (i = parent_order_id.length; i > 0; i--) {
 			// update progress bar
-			loadProgress(parent_order_id[i-1]);
+			remove = loadProgress(parent_order_id[i-1]);
 			// if remove flag is set to true
 			if (remove == true) {
 				if (parent_order_id.length > 0) {
@@ -59,42 +64,14 @@ function progressBar() {
 					parent_order_id.splice(i-1, 1);
 					// reset flag
 					remove = false;
+					console.log("inside remove " + remove);
 				}
 			}	
 		}
+		console.log("outside loop " + remove);
 	}
 }
 
 progressBar(); // This will run on page load
-timer = setInterval(function(){ progressBar() }, 3000); // get progress every 1 seconds
+timer = setInterval(function(){ progressBar() }, 2000); // get progress every 2 seconds
 
-/* function refreshProgress() {
-
-	for (i = parent_order_id.length; i <= 0; i--) {
-		// if remove flag is set to true
-		if (remove == true) {
-			if (parent_order_id.length >= 0) {
-				// remove element
-				parent_order_id.splice(0, i);
-				// reset flag
-				remove == false;
-			}
-		}
-		// if no more in progress orders exist, stop polling
-		if (parent_order_id.length == 0) {
-			clearInterval(timer);
-		} else {
-			// otherwise update progress bars
-			progressBar(parent_order_id[i]);
-			// wrap loop index around to front to keep polling
-			if (i == 0) {
-				i = parent_order_id.length;
-			}
-		}
-	}
-
-} */
-
-/* parent_order_id.forEach(function(listItem, index){
-    loadProgress(listItem);
-}); */
