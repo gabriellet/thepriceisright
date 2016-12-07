@@ -1,32 +1,17 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from django.db.models import Sum, F
 
 from stocks.models import ParentOrder, ChildOrder
 # from forms import UserForm
 
 @login_required(login_url="login/")
 def index(request):
-    order_list = ParentOrder.objects.all().order_by('-time_executed')
+    order_list = ParentOrder.objects.all().order_by('-id')
     for order in order_list:
-        child_sold = ChildOrder.objects.filter(parent_order=order.id).filter(is_successful=True).aggregate(Sum('quantity'))
-        child_sold = child_sold['quantity__sum']
+        children = ChildOrder.objects.filter(parent_order__id=order.id)
 
-    	# if order.status == ParentOrder.IN_PROGRESS or order.status == ParentOrder.FAILED:
-        if child_sold is None:
-			order.progress = 0.0  # Why this logic jackie? # there was no logic it was 4am
-        else:
-			order.progress = (float(child_sold)/float(order.quantity)) * 100
-        
-        total_price = ChildOrder.objects.filter(parent_order=order.id).filter(is_successful=True).aggregate(total=Sum(F('price') * F('quantity')))
-        total_price = total_price['total']
-        if total_price is None:
-            order.avg_price = 0.0
-        else:
-            order.avg_price = '{:,.2f}'.format(total_price/child_sold)
-
-    	# else:
-    	# 	order.progress = 100.0
+        order_stats = order.get_stats(children)
+        order.avg_price = '{:,.2f}'.format(order_stats['average_price'])
 
     context_dict = {'orders': order_list}
 

@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
 from django.db.models import Sum, F
+from django import forms as _forms
 
 from forms import ParentOrderForm, PauseResumeForm
 from models import ParentOrder, ChildOrder
@@ -24,22 +25,19 @@ def index(request):
 					api_response = order.query_market_datetime()
 					order.time_executed = api_response
 					order.save()  #second time is to save timestamp
-				else:
-					# TODO
-					return HttpResponse("Invalid Order! Order quantity must be an integer greater than zero.")
 
-				t1 = Thread(target=order.trade)  # automatically try to execute trade upon submission
-				t1.daemon = True
-				t1.start()
-				return redirect('index')
+					t1 = Thread(target=order.trade)  # automatically try to execute trade upon submission
+					t1.daemon = True
+					t1.start()
+					return redirect('index')
+
+				else:
+					form.add_error('quantity', 'Enter an integer greater than zero.')
+					# return HttpResponse("Invalid Order! Order quantity must be an integer greater than zero.")
 
 			except:
-				# TODO
-				return HttpResponse("Invalid Order!")
-
-		else:
-			# TODO
-			return HttpResponse("Form not Valid")
+				form.add_error('quantity', '{:,d} is too large.'.format(form.cleaned_data['quantity']))
+				# return HttpResponse("Invalid Order!")
 
 	else:
 		form = ParentOrderForm()
@@ -69,38 +67,24 @@ def order_detail(request, id):
 
 	# else:
 	form = PauseResumeForm()
+
+	parent = get_object_or_404(ParentOrder, id=id)
+
 	try:
-		children = ChildOrder.objects.filter(parent_order__id=id).order_by('-time_executed')
+		children = ChildOrder.objects.filter(parent_order__id=id).order_by('-id')
 	except ChildOrder.DoesNotExist:
 		raise Http404('No Child Orders')
 
-	parent = get_object_or_404(ParentOrder, id=id)
-	
-	total_price = children.filter(is_successful=True).aggregate(total=Sum(F('price') * F('quantity')))
-	total_sold = children.filter(is_successful=True).aggregate(Sum('quantity'))
-
-	if total_sold['quantity__sum'] is None:
-		progress = 0.0
-	else:
-		progress = (float(total_sold['quantity__sum'])/float(parent.quantity)) * 100
-
-	if total_price['total'] is None:
-		avg_price = 0.0
-		total_price = 0.0
-		total_sold = 0
-	else:
-		total_price = total_price['total']
-		total_sold = total_sold['quantity__sum']
-		avg_price = '{:,.2f}'.format(total_price/total_sold)
+	# total price, total sold, and average price
+	parent_stats = parent.get_stats(children)
 
 	return render(request, 'order_detail.html', 
 		{
 		'child_orders': children, 
 		'parent_order': parent, 
-		'average_price': avg_price,
-		'total_price': '{:,.2f}'.format(total_price),
-		'total_sold': '{:,d}'.format(total_sold),
-		'progress': progress,
+		'total_price': '{:,.2f}'.format(parent_stats['total_price']), 
+		'total_sold': '{:,d}'.format(parent_stats['total_quantity']), 
+		'average_price': '{:,.2f}'.format(parent_stats['average_price']), 
 		'form': form
 		})
 
@@ -130,7 +114,7 @@ def resume_order(request, id):
 		return False
 	parent.status = ParentOrder.IN_PROGRESS
 	parent.save()
-	t1 = Thread(target=order.trade)  # automatically try to execute trade upon submission
+	t1 = Thread(target=parent.trade)  # automatically try to execute trade upon submission
 	t1.daemon = True
 	t1.start()
 	return redirect('index')

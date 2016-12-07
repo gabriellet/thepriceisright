@@ -53,6 +53,31 @@ class ParentOrder(models.Model):
 		else:
 			return True
 
+	def get_total_price(self, children):
+		total_price = (children.filter(is_successful=True).aggregate(total=Sum(F('price') * F('quantity'))))['total']
+		if total_price is None:
+			return 0.0
+		else:
+			return total_price
+
+	def get_total_quantity(self, children):
+		total_quantity = (children.filter(is_successful=True).aggregate(Sum('quantity')))['quantity__sum']
+		if total_quantity is None:
+			return 0
+		else:
+			return total_quantity
+
+	def get_stats(self, children):
+		if len(children) == 0:
+			return {'total_price': 0.0, 'total_quantity': 0, 'average_price': 0.0}
+		
+		total_price = self.get_total_price(children)
+		total_quantity = self.get_total_quantity(children)
+		if total_price == 0.0:
+			return {'total_price': total_price, 'total_quantity': total_quantity, 'average_price': 0.0}
+		else:
+			return {'total_price': total_price, 'total_quantity': total_quantity, 'average_price': total_price/total_quantity}
+
 	def verify_market_price(self, price_json):
 		top_bid = price_json.get('top_bid')
 		if top_bid is None:
