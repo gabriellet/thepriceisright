@@ -52,8 +52,6 @@ def order_detail(request, id):
 		if form.is_valid():
 			status_change = form.cleaned_data['status']
 
-			# print status_change
-
 			if status_change == 'P':
 				resume_order(request, id)
 			elif status_change == 'S':
@@ -65,7 +63,6 @@ def order_detail(request, id):
 			# TODO
 			return HttpResponse("Form not Valid")
 
-	# else:
 	form = PauseResumeForm()
 
 	parent = get_object_or_404(ParentOrder, id=id)
@@ -113,6 +110,7 @@ def resume_order(request, id):
 	if(parent.status != ParentOrder.PAUSED):  # We can only resume orders that are paused
 		return False
 	parent.status = ParentOrder.IN_PROGRESS
+	parent.update_progress()
 	parent.save()
 	t1 = Thread(target=parent.trade)  # automatically try to execute trade upon submission
 	t1.daemon = True

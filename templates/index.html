@@ -51,6 +51,90 @@
     </table>
   </div>
 
+  <h2 class="sub-header">Paused Orders</h2>
+
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Sell</th>
+          <th>Quantity</th>
+          <th>Time</th>
+          <th>Progress</th>
+        </tr>
+      </thead>
+      {% if orders %}
+        <tbody>
+            {% for order in orders %}
+              {% if order.status == 'S' %}
+              <tr>
+                  <td> <a href="{% url 'order_detail' order.id %}">{{ order.id }} </a>
+                  <td> {{ order.is_sell }}
+                  <td> {{ order.quantity }}
+                  <td class="col-md-3"> {{ order.time_executed }} EST
+                  <td class="col-md-3"> 
+                      <div class="progress">
+                          <div id="progress-{{order.id}}" data-id="{{order.id}}" class="progress-bar 
+                          {% if order.status == 'P' %} 
+                              progress-bar-success progress-bar-striped active
+                          {% endif %}
+                          {% if order.status == 'F' %} 
+                              progress-bar-danger progress-bar-striped active
+                          {% endif %}" role="progressbar"
+                          role="progressbar" aria-valuenow="{{ order.progress }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ order.progress }}%"> {{ order.progress }}%
+                          </div>
+                      </div>
+              </tr>
+              {% endif %}
+            {% endfor %}
+        </tbody>
+    {% endif %}
+    </table>
+  </div>
+
+  <h2 class="sub-header">Canceled Orders</h2>
+
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Sell</th>
+          <th>Quantity</th>
+          <th>Time</th>
+          <th>Progress</th>
+        </tr>
+      </thead>
+      {% if orders %}
+        <tbody>
+            {% for order in orders %}
+              {% if order.status == 'X' %}
+              <tr>
+                  <td> <a href="{% url 'order_detail' order.id %}">{{ order.id }} </a>
+                  <td> {{ order.is_sell }}
+                  <td> {{ order.quantity }}
+                  <td class="col-md-3"> {{ order.time_executed }} EST
+                  <td class="col-md-3"> 
+                      <div class="progress">
+                          <div id="progress-{{order.id}}" data-id="{{order.id}}" class="progress-bar 
+                          {% if order.status == 'P' %} 
+                              progress-bar-success progress-bar-striped active
+                          {% endif %}
+                          {% if order.status == 'F' %} 
+                              progress-bar-danger progress-bar-striped active
+                          {% endif %}" role="progressbar"
+                          role="progressbar" aria-valuenow="{{ order.progress }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ order.progress }}%"> {{ order.progress }}%
+                          </div>
+                      </div>
+              </tr>
+              {% endif %}
+            {% endfor %}
+        </tbody>
+    {% endif %}
+    </table>
+  </div>
+
   <h2 class="sub-header">Completed Orders</h2>
   <div class="table-responsive">
     <table class="table table-striped">
