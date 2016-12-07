@@ -76,16 +76,16 @@ class ParentOrder(models.Model):
 
 	def query_market_datetime(self, number_of_tries=10):
 		quote = json.loads(urllib2.urlopen(QUERY.format(self.id)).read())
+		# do we need this while loop?
 		while not self.verify_market_price(quote):  # We failed to verify, the exchange simulator returned a bad response
 			quote = json.loads(urllib2.urlopen(QUERY.format(self.id)).read())
 			time.sleep(5)  # sleep 5 seconds before trying again
 			number_of_tries -= 1
 			if number_of_tries == 0:  # no tries left, we give up querying and selling
 				return False
-		d = quote['timestamp']
-		FORMAT = '%Y-%m-%d %H:%M:%S.%f'
+		d = quote['timestamp'] + " UTC" # add UTC since this is time zone returned by simulator
+		FORMAT = '%Y-%m-%d %H:%M:%S.%f %Z'
 		dt = datetime.datetime.strptime(d, FORMAT)
-		print type(dt)
 		return dt
 
 	def execute_sell(self, quantity, price):

@@ -37,7 +37,7 @@
 
 <div class="progress">
 
-  <div id="progress" class="progress-bar 
+  <div id="progress-{{parent_order.id}}" data-id="{{order.id}}" class="progress-bar 
       {% if parent_order.status == 'P' %} 
           progress-bar-success progress-bar-striped active
       {% endif %}
@@ -47,8 +47,8 @@
       {% if parent_order.status == 'F' %} 
           progress-bar-danger progress-bar-striped active
       {% endif %}" role="progressbar"
-    aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%">
-    <!-- {{progress}}% Complete -->
+    aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" style="min-width:4em; width:{{progress}}%">
+    {{progress}}%
 
   </div>
 </div>
@@ -89,21 +89,9 @@
   </table>
 </div>
 
-<script language="javascript" type="text/javascript">
-var timer;
-var newprogress;
-function loadProgress(){
-    $.get("/order/{{ parent_order.id }}/get_progress", function( newprogress ) {
-      $('#progress').attr('aria-valuenow', parseFloat(newprogress)).css('width',parseFloat(newprogress)+'%');
-      if (newprogress == 100.00 ) {
-        clearInterval(timer)
-      }
-    });
-}
-
-loadProgress(); // This will run on page load
-timer = setInterval(function(){ loadProgress() }, 2000); // get progress every two seconds
-
+<script> 
+var parent_order_id = [{{ parent_order.id }}];
 </script>
+<script src="{% static "js/progress.js" %}" language="javascript" type="text/javascript"></script>
 
 {% endblock %}

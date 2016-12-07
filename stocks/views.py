@@ -109,6 +109,10 @@ def get_progress(request, id):
 	current_progress = '{:,.2f}'.format(parent.progress)
 	return HttpResponse(current_progress)
 
+def get_status(request, id):
+	parent = get_object_or_404(ParentOrder, id=id)
+	return HttpResponse(parent.status)
+
 
 def pause_order(request, id):
 	parent = get_object_or_404(ParentOrder, id=id)
