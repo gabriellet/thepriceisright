@@ -32,7 +32,7 @@ def index(request):
 					return redirect('index')
 
 				else:
-					form.add_error('quantity', 'Enter an integer greater than zero.')
+					form.add_error('quantity', 'Enter a whole number greater than zero.')
 					# return HttpResponse("Invalid Order! Order quantity must be an integer greater than zero.")
 
 			except:

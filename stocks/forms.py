@@ -24,6 +24,7 @@ class ParentOrderForm(forms.ModelForm):
 	is_sell = forms.ChoiceField(label="Buy or Sell?", choices=BUY_OR_SELL_CHOICE, required=True, 
 		widget=forms.Select(attrs={'class': 'form-control'}))
 	quantity = forms.IntegerField(label='Quantity', required=True,
+		error_messages = {'required': _('Enter a whole number.')},
 		widget=forms.NumberInput(attrs={'class': 'form-control'}))
 	stock_type = forms.ChoiceField(label="Stock Type", choices=STOCK_CHOICE, required=True, 
 		widget=forms.Select(attrs={'class': 'form-control'}))
