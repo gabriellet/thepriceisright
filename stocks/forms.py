@@ -28,20 +28,6 @@ class ParentOrderForm(forms.ModelForm):
 	stock_type = forms.ChoiceField(label="Stock Type", choices=STOCK_CHOICE, required=True, 
 		widget=forms.Select(attrs={'class': 'form-control'}))
 
-	def clean(self):
-		# run standar clean method first
-		cleaned_data=super(ParentOrderForm, self).clean()
-		quantity = cleaned_data.get('quantity')
-
-		if quantity <= 0:
-			raise ValidationError(
-				_('Enter an integer greater than zero.'),
-				code = 'negative'
-			)
-
-		# return cleaned data
-		return cleaned_data
-
 	class Meta:
 		model = ParentOrder
 		fields = ('is_sell', 'quantity', 'stock_type')

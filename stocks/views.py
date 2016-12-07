@@ -25,23 +25,19 @@ def index(request):
 					api_response = order.query_market_datetime()
 					order.time_executed = api_response
 					order.save()  #second time is to save timestamp
-				else:
-					# TODO
-					return HttpResponse("Invalid Order! Order quantity must be an integer greater than zero.")
 
-				t1 = Thread(target=order.trade)  # automatically try to execute trade upon submission
-				t1.daemon = True
-				t1.start()
-				return redirect('index')
+					t1 = Thread(target=order.trade)  # automatically try to execute trade upon submission
+					t1.daemon = True
+					t1.start()
+					return redirect('index')
+
+				else:
+					form.add_error('quantity', 'Enter an integer greater than zero.')
+					# return HttpResponse("Invalid Order! Order quantity must be an integer greater than zero.")
 
 			except:
-				# TODO
 				form.add_error('quantity', '{:,d} is too large.'.format(form.cleaned_data['quantity']))
 				# return HttpResponse("Invalid Order!")
-
-		# else:
-		# 	# TODO
-		# 	return HttpResponse("Form not Valid")
 
 	else:
 		form = ParentOrderForm()
