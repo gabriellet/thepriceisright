@@ -37,73 +37,59 @@
 
 <div class="progress">
 
-  <div id="progress" class="progress-bar 
-      {% if parent_order.status == 'P' %} 
-          progress-bar-success progress-bar-striped active
-      {% endif %}
-      {% if parent_order.status == 'C' %} 
-          progress-bar-success progress-bar
-      {% endif %}
-      {% if parent_order.status == 'F' %} 
-          progress-bar-danger progress-bar-striped active
-      {% endif %}" role="progressbar"
-    aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%">
-    <!-- {{progress}}% Complete -->
+  {% if parent_order.status == 'P' %}
+    <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar"
+    aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ progress }}%">
+    {{progress}}% Complete
+  {% endif %}
+  {% if parent_order.status == 'C' %}
+    <div class="progress-bar progress-bar-success progress-bar" role="progressbar"
+    aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ progress }}%">
+    {{progress}}% Complete
+  {% endif %}
+  {% if parent_order.status == 'F' %}
+    <div class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar"
+    aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ progress }}%">
+    {{progress}}% Complete
+  {% endif %}
 
   </div>
 </div>
 
 <div class="table-responsive">
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Time</th>
-        <th>Child Order Number</th>
-        <th>Quantity</th>
-        <th>Status</th>
-        <th>Attempted Price</th>
-      </tr>
-    </thead>
-      {% if child_orders %}
-      <tbody>
-          {% for co in child_orders %}
-              {% if co.is_successful %} 
-                  <tr class="success">
-              {% else %}
-                  <tr class="danger">
-              {% endif %}
-                  <td> {{ co.time_executed }} EST
-                  <td> {{ co.id }}
-                  <td> {{ co.quantity }}
-                  <td> {% if co.is_successful %} 
-                          SUCCEEDED
-                      {% else %}
-                          FAILED
-                      {% endif %}
-                  <td> {{ co.price }}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Time</th>
+          <th>Child Order Number</th>
+          <th>Quantity</th>
+          <th>Status</th>
+          <th>Attempted Price</th>
+        </tr>
+      </thead>
+        {% if child_orders %}
+        <tbody>
+            {% for co in child_orders %}
+                {% if co.is_successful %} 
+                    <tr class="success">
+                {% else %}
+                    <tr class="danger">
+                {% endif %}
+                    <td> {{ co.time_executed }} EST
+                    <td> {{ co.id }}
+                    <td> {{ co.quantity }}
+                    <td> {% if co.is_successful %} 
+                            SUCCEEDED
+                        {% else %}
+                            FAILED
+                        {% endif %}
+                    <td> {{ co.price }}
 
-              </tr>
-          {% endfor %}
-      </tbody>
-      {% endif %}
-  </table>
-</div>
-
-<script language="javascript" type="text/javascript">
-var timer;
-var newprogress;
-function loadProgress(){
-    $.get("/order/{{ parent_order.id }}/get_progress", function( newprogress ) {
-      $('#progress').attr('aria-valuenow', parseFloat(newprogress)).css('width',parseFloat(newprogress)+'%');
-      if (newprogress == 100.00 ) {
-        clearInterval(timer)
-      }
-    });
-}
-
-loadProgress(); // This will run on page load
-timer = setInterval(function(){ loadProgress() }, 2000); // get progress every two seconds
-
-</script>
+                </tr>
+            {% endfor %}
+        </tbody>
+        {% endif %}
+    </table>
+  </div>
 
 {% endblock %}
