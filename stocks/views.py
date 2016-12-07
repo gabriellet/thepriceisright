@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
 from django.db.models import Sum, F
+from django import forms as _forms
 
 from forms import ParentOrderForm, PauseResumeForm
 from models import ParentOrder, ChildOrder
@@ -27,10 +28,6 @@ def index(request):
 				else:
 					# TODO
 					return HttpResponse("Invalid Order! Order quantity must be an integer greater than zero.")
-					# raise ValidationError(
-					# 	_('Invalid value: Invalid Order! Order quantity must be an integer greater than zero.'),
-					# 	code='invalid',
-					# )
 
 				t1 = Thread(target=order.trade)  # automatically try to execute trade upon submission
 				t1.daemon = True
@@ -39,11 +36,12 @@ def index(request):
 
 			except:
 				# TODO
-				return HttpResponse("Invalid Order!")
+				form.add_error('quantity', '{:,d} is too large.'.format(form.cleaned_data['quantity']))
+				# return HttpResponse("Invalid Order!")
 
-		else:
-			# TODO
-			return HttpResponse("Form not Valid")
+		# else:
+		# 	# TODO
+		# 	return HttpResponse("Form not Valid")
 
 	else:
 		form = ParentOrderForm()

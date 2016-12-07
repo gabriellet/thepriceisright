@@ -1,7 +1,15 @@
 from django import forms
+from django.core.exceptions import ValidationError
+from django.utils.translation import ugettext_lazy as _
 
 from models import ParentOrder
 
+def validate_order_quantity(value):
+    if value <= 0:
+        raise ValidationError(
+            _('Please enter an integer greater than zero.'),
+            code='negative'
+        )
 
 class ParentOrderForm(forms.ModelForm):
 
@@ -15,10 +23,24 @@ class ParentOrderForm(forms.ModelForm):
 
 	is_sell = forms.ChoiceField(label="Buy or Sell?", choices=BUY_OR_SELL_CHOICE, required=True, 
 		widget=forms.Select(attrs={'class': 'form-control'}))
-	quantity = forms.IntegerField(label='Quantity', required=True, 
+	quantity = forms.IntegerField(label='Quantity', required=True,
 		widget=forms.NumberInput(attrs={'class': 'form-control'}))
 	stock_type = forms.ChoiceField(label="Stock Type", choices=STOCK_CHOICE, required=True, 
 		widget=forms.Select(attrs={'class': 'form-control'}))
+
+	def clean(self):
+		# run standar clean method first
+		cleaned_data=super(ParentOrderForm, self).clean()
+		quantity = cleaned_data.get('quantity')
+
+		if quantity <= 0:
+			raise ValidationError(
+				_('Enter an integer greater than zero.'),
+				code = 'negative'
+			)
+
+		# return cleaned data
+		return cleaned_data
 
 	class Meta:
 		model = ParentOrder
