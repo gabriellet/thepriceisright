@@ -54,34 +54,33 @@
 </div>
 
 <div class="table-responsive">
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Time</th>
-        <th>Child Order Number</th>
-        <th>Quantity</th>
-        <th>Status</th>
-        <th>Attempted Price</th>
-      </tr>
-    </thead>
-      {% if child_orders %}
-      <tbody>
-          {% for co in child_orders %}
-              {% if co.is_successful %} 
-                  <tr class="success">
-              {% else %}
-                  <tr class="danger">
-              {% endif %}
-                  <td> {{ co.time_executed }} EST
-                  <td> {{ co.id }}
-                  <td> {{ co.quantity }}
-                  <td> {% if co.is_successful %} 
-                          SUCCEEDED
-                      {% else %}
-                          FAILED
-                      {% endif %}
-                  <td> {{ co.price }}
-
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Time</th>
+          <th>Child Order Number</th>
+          <th>Quantity</th>
+          <th>Status</th>
+          <th>Attempted Price</th>
+        </tr>
+      </thead>
+        {% if child_orders %}
+        <tbody>
+            {% for co in child_orders %}
+                {% if co.is_successful %} 
+                    <tr class="success">
+                {% else %}
+                    <tr class="danger">
+                {% endif %}
+                    <td> {{ co.time_executed }} EST
+                    <td> {{ co.id }}
+                    <td> {{ co.quantity }}
+                    <td> {% if co.is_successful %} 
+                            SUCCEEDED
+                        {% else %}
+                            FAILED
+                        {% endif %}
+                    <td> {{ co.price }}
               </tr>
           {% endfor %}
       </tbody>
@@ -93,5 +92,6 @@
 var parent_order_id = [{{ parent_order.id }}];
 </script>
 <script src="{% static "js/progress.js" %}" language="javascript" type="text/javascript"></script>
+
 
 {% endblock %}
