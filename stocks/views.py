@@ -4,6 +4,9 @@ from django.http import Http404, HttpResponse
 from django.db.models import Sum, F
 from django import forms as _forms
 
+from django.core.serializers import serialize
+from django.utils.safestring import mark_safe
+
 from forms import ParentOrderForm, PauseResumeForm
 from models import ParentOrder, ChildOrder
 from threading import Thread
@@ -70,7 +73,7 @@ def order_detail(request, id):
 	try:
 		children = ChildOrder.objects.filter(parent_order__id=id).order_by('-id')
 	except ChildOrder.DoesNotExist:
-		raise Http404('No Child Orders')
+		children = ChildOrder.objects.none()
 
 	# total price, total sold, and average price
 	parent_stats = parent.get_stats(children)
@@ -94,6 +97,14 @@ def get_status(request, id):
 	parent = get_object_or_404(ParentOrder, id=id)
 	return HttpResponse(parent.status)
 
+def get_children(request, id, child_id):
+	print "in get_children"
+	parent = get_object_or_404(ParentOrder, id=id)
+	try:
+		children = ChildOrder.objects.filter(parent_order__id=id).filter(id__gt=child_id)
+	except ChildOrder.DoesNotExist:
+		children = ChildOrder.objects.none()
+	return mark_safe(serialize('json', children))
 
 def pause_order(request, id):
 	parent = get_object_or_404(ParentOrder, id=id)

@@ -1,6 +1,28 @@
 
 var timer;
 
+function transactionTable() {
+
+	var child_id = document.getElementsByClassName("child-id")[0];
+
+	function loadChildren(id, child_id){
+		var children;
+		var selector = '#children-' + id + ' tr:first';
+		var children_url = "/order/" + id + "/get_children/" + child_id;
+
+		// get current order children
+	    $.get(children_url, function( children ) {
+	    	console.log(children);
+
+	    	for(i=0; i<children.length; i++) {
+	    		console.log(children[i]);
+	    		// if(children)
+	    		// $(selector).before("");
+	    	}
+	    });
+	}
+}
+
 function progressBar() {
 
 	var remove = false;
@@ -24,7 +46,6 @@ function progressBar() {
 		  	case 'C': //completed
 		  		pg = 'progress-bar progress-bar-success progress-bar';
 		  		r = true;
-		  		console.log("you fucker this is r: " + r);
 		  		break;
 		  	case 'F': //failed
 		  		pg = 'progress-bar progress-bar-danger progress-bar';
@@ -70,6 +91,8 @@ function progressBar() {
 		}
 		console.log("outside loop " + remove);
 	}
+
+	transactionTable(); // update transaction table
 }
 
 progressBar(); // This will run on page load

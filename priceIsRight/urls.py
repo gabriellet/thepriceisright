@@ -30,4 +30,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^order/(?P<id>[0-9]+)/get_progress/$', views.get_progress, name='get_progress'),
     url(r'^order/(?P<id>[0-9]+)/get_status/$', views.get_status, name='get_status'),
+    url(r'^order/(?P<id>[0-9]+)/get_children/(?P<child_id>[0-9]+)/$', views.get_children, name='get_children'),
 ]

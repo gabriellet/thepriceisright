@@ -54,7 +54,7 @@
 </div>
 
 <div class="table-responsive">
-    <table class="table table-striped">
+    <table class="table table-striped" id="children-{{parent_order.id}}">
       <thead>
         <tr>
           <th>Time</th>
@@ -73,7 +73,7 @@
                     <tr class="danger">
                 {% endif %}
                     <td> {{ co.time_executed }} EST
-                    <td> {{ co.id }}
+                    <td class="child-id"> {{ co.id }}
                     <td> {{ co.quantity }}
                     <td> {% if co.is_successful %} 
                             SUCCEEDED
