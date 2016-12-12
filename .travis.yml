@@ -8,4 +8,3 @@ install:
 script:
     - flake8
     - python manage.py test
-    - coverage report
