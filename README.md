@@ -10,8 +10,10 @@ Members:
 * Aaron Ong @Aaronong    
 
 ### Version History
-__v2.0__ - Demo (Team Assignment 3)  
-v1.0 - Toy Project (Homework 2)  
+__v2.1__ - MVP
+v2.0 - Second Iteration
+v1.0 - First Iteration 
+v0.1 - Toy Project (Homework 2)  
 Current version in bold. For detailed version history see Wiki.  
 
 ### Usage
