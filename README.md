@@ -1,4 +1,4 @@
-# thepriceisright
+# thepriceisright   
 
 ### JP Morgan Chase Project  
 Group: ExceptionHandlers  
@@ -9,11 +9,12 @@ Members:
 * Leon Song @ls3233  
 * Aaron Ong @Aaronong    
 
-### Version History
-__v2.1__ - MVP
-v2.0 - Second Iteration
-v1.0 - First Iteration 
-v0.1 - Toy Project (Homework 2)  
+
+### Version History  
+__v2.1__ - MVP  ![Travis CI Build Status](https://travis-ci.org/gabriellet/thepriceisright.svg?branch=master)   
+v2.0 - Second Iteration   
+v1.0 - First Iteration    
+v0.1 - Toy Project (Homework 2)    
 Current version in bold. For detailed version history see Wiki.  
 
 ### Usage
