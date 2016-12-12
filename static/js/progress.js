@@ -1,28 +1,6 @@
 
 var timer;
 
-function transactionTable() {
-
-	var child_id = document.getElementsByClassName("child-id")[0];
-
-	function loadChildren(id, child_id){
-		var children;
-		var selector = '#children-' + id + ' tr:first';
-		var children_url = "/order/" + id + "/get_children/" + child_id;
-
-		// get current order children
-	    $.get(children_url, function( children ) {
-	    	console.log(children);
-
-	    	for(i=0; i<children.length; i++) {
-	    		console.log(children[i]);
-	    		// if(children)
-	    		// $(selector).before("");
-	    	}
-	    });
-	}
-}
-
 function progressBar() {
 
 	var remove = false;
@@ -66,8 +44,7 @@ function progressBar() {
 	      $(selector).html(newprogress+'%');
 	    });
 
-	    console.log("returning r " + r);
-	    return r;
+	    return r; // can't actually return r like this, need a callback function
 	}
 
 	// if no more in progress orders exist, stop polling
@@ -85,14 +62,11 @@ function progressBar() {
 					parent_order_id.splice(i-1, 1);
 					// reset flag
 					remove = false;
-					console.log("inside remove " + remove);
 				}
 			}	
 		}
-		console.log("outside loop " + remove);
 	}
 
-	transactionTable(); // update transaction table
 }
 
 progressBar(); // This will run on page load
