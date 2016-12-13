@@ -1,4 +1,3 @@
-
 var progress_timer;
 
 function progressBar() {
@@ -45,7 +44,7 @@ function progressBar() {
 	    });
 
 	    // console.log("returning r " + r);
-	    return r;
+	    return r; // can't actually return r like this, need a callback function
 	}
 
 	function loadChildren(id){
@@ -117,11 +116,9 @@ function progressBar() {
 					parent_order_id.splice(i-1, 1);
 					// reset flag
 					remove = false;
-					console.log("inside remove " + remove);
 				}
 			}	
 		}
-		console.log("outside loop " + remove);
 	}
 }
 
