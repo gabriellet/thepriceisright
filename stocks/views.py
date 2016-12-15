@@ -104,7 +104,7 @@ def get_children(request, id, child_id):
 		children = ChildOrder.objects.filter(parent_order__id=id).filter(id__gt=child_id)
 	except ChildOrder.DoesNotExist:
 		children = ChildOrder.objects.none()
-	return mark_safe(serialize('json', children))
+	return HttpResponse(mark_safe(serialize('json', children)))
 
 def pause_order(request, id):
 	parent = get_object_or_404(ParentOrder, id=id)

@@ -1,5 +1,4 @@
-
-var timer;
+var progress_timer;
 
 function progressBar() {
 
@@ -44,12 +43,67 @@ function progressBar() {
 	      $(selector).html(newprogress+'%');
 	    });
 
+	    // console.log("returning r " + r);
 	    return r; // can't actually return r like this, need a callback function
+	}
+
+	function loadChildren(id){
+		var children;
+		var child_selector = '#children-' + id + ' tr:first';
+		var child_id = parseInt(document.getElementsByClassName("child-id")[0].textContent);
+		var children_url = "/order/" + id + "/get_children/" + child_id;
+		// console.log(children_url);
+
+		// get current order children
+	    $.get(children_url, function( children ) {
+	    	children = JSON.parse(children);
+	    	// console.log(children);
+	    	// console.log(children.length);
+
+	    	for(var i=0; i<children.length; i++) {
+	    		// console.log(children[i]);
+	    		var fields = children[i]['fields'];
+	    		var child_class = fields['is_successful'] ? "success" : "danger";
+	    		var child_label = fields['is_successful'] ? "SUCCEEDED" : "FAILED";
+	    		var date = new Date(fields['time_executed']);
+	    		var options = {
+    				year: "numeric", month: "short",
+    				day: "numeric", hour: "2-digit", minute: "2-digit"
+				};
+	    		var date_formatted = date.toLocaleTimeString("en-us", options);
+	    		date_formatted = date_formatted.replace("AM", "a.m.");
+	    		date_formatted = date_formatted.replace("PM", "p.m.");
+	    		date_formatted = date_formatted.replace(" ", ". ");
+	    		// console.log(typeof date_formatted);
+	    		// console.log(date_formatted);
+	    		// for (var key in children[i]['fields']){
+			    //     var attrName = key;
+			    //     console.log("key: " + attrName);
+			    //     var attrValue = children[i]['fields'][key];
+			    //     console.log("value: " + attrValue);
+			    // }
+	    		$(child_selector).after(
+	    		// console.log(
+	    			"<tr class=\"" + child_class + "\"> \
+                    	<td> " + date_formatted + " EST \
+                    	<td class=\"child-id\"> " + children[i]['pk'] + " \
+                    	<td> " + fields['quantity'] + " \
+                    	<td> " + child_label + " \
+                    	<td> " + fields['price'] + " \
+              		</tr>"
+              	);
+	    	}
+	    });
+	}
+
+	// progress_type declared on relevant template pages
+	if(progress_type == "detail") {
+		loadChildren(parent_order_id[0]);
 	}
 
 	// if no more in progress orders exist, stop polling
 	if (parent_order_id.length == 0) {
-		clearInterval(timer);
+		clearInterval(progress_timer);
 	} else {
 		// otherwise update progress bars
 		for (i = parent_order_id.length; i > 0; i--) {
@@ -66,9 +120,7 @@ function progressBar() {
 			}	
 		}
 	}
-
 }
 
 progressBar(); // This will run on page load
-timer = setInterval(function(){ progressBar() }, 2000); // get progress every 2 seconds
-
+progress_timer = setInterval(function(){ progressBar() }, 2000); // get progress every 2 seconds
