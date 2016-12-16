@@ -1,8 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.http import Http404, HttpResponse
-from django.db.models import Sum, F
-from django import forms as _forms
+from django.http import HttpResponse
 
 from django.core.serializers import serialize
 from django.utils.safestring import mark_safe
