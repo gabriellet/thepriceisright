@@ -8,7 +8,6 @@ import datetime
 import time
 import json
 
-
 QUERY = "http://localhost:8080/query?id={}"
 ORDER = "http://localhost:8080/order?id={}&side=sell&qty={}&price={}"
 ORDER_DISCOUNT = 1
@@ -16,7 +15,6 @@ N = 5
 FAILURE_TOLERANCE = -3
 SUCCESS_TOLERANCE = 2
 
-# Create your models here.
 @python_2_unicode_compatible
 class ParentOrder(models.Model):
     quantity = models.IntegerField(blank=False, default=1)
@@ -151,12 +149,6 @@ class ParentOrder(models.Model):
             )
             self.progress += (order['qty']/self.quantity) * 100
             self.save()
-
-            # self.update_progress()
-            # print "==========="
-            # print "PROGRESS"
-            # print self.progress
-            # print "==========="
 
         co.time_executed = order['timestamp']
         co.save()
