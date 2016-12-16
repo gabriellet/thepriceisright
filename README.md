@@ -10,12 +10,8 @@ Members:
 * Aaron Ong @Aaronong    
 
 
-### Version History  
-__v2.1__ - MVP  ![Travis CI Build Status](https://travis-ci.org/gabriellet/thepriceisright.svg?branch=master)   
-v2.0 - Second Iteration   
-v1.0 - First Iteration    
-v0.1 - Toy Project (Homework 2)    
-Current version in bold. For detailed version history see Wiki.  
+### Build Status     
+![Travis CI Build Status](https://travis-ci.org/gabriellet/thepriceisright.svg?branch=master)    
 
 ### Usage
 `python manage.py runserver`  
@@ -38,6 +34,5 @@ Mock 2.0.0
 `./manage.py test`
 
 OR if you want to test something specific
-
 `./manage.py test <appname>.tests.TestClass.TestMethod`
 
