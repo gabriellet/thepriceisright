@@ -27,7 +27,7 @@
         <tbody>
             {% for order in orders %}
               {% if order.status == 'P' or order.status == 'F' %}
-              <tr>
+              <tr id="current-{{order.id}}">
                   <td> <a href="{% url 'order_detail' order.id %}">{{ order.id }} </a>
                   <td> {{ order.is_sell }}
                   <td> {{ order.stock_type }}
@@ -144,7 +144,7 @@
         <tbody>
             {% for order in orders %}
                 {% if order.status == 'C' %}
-                    <tr>
+                    <tr id="completed-{{order.id}}">
                         <td> <a href="{% url 'order_detail' order.id %}">{{ order.id }} </a>
                         <td> {{ order.is_sell }}
                         <td> {{ order.stock_type }}

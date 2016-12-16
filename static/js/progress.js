@@ -5,7 +5,6 @@ function progressBar() {
     var remove = false;
 
     function loadProgress(id){
-        var r;
         var newprogress;
         var newstatus;
         var pg;
@@ -14,7 +13,6 @@ function progressBar() {
         var status_url = "/order/" + id + "/get_status/";
 
         // get current order status, set progress bar color, etc
-        r = false;
         $.get(status_url, function( newstatus ) {
             switch (newstatus) {
             case "P": //in progress
@@ -22,7 +20,6 @@ function progressBar() {
                 break;
             case "C": //completed
                 pg = "progress-bar progress-bar-success progress-bar";
-                r = true;
                 break;
             case "F": //failed
                 pg = "progress-bar progress-bar-danger progress-bar";
@@ -45,10 +42,15 @@ function progressBar() {
                 if(progress_type == "detail") {
                     $("#order-buttons").html("");
                 }
+                var parent_index = parent_order_id.indexOf(id);
+                if(parent_index != -1) {
+                    pg = "progress-bar progress-bar-success progress-bar";
+                    $(selector).attr("class", pg);
+                    parent_order_id.splice(parent_index, 1);
+                    
+                }
             }
         });
-
-        return r; // TODO: can't actually return r like this, need a callback function
     }
 
     function loadChildren(id){
@@ -104,7 +106,7 @@ function progressBar() {
     }
 
     // progress_type declared on relevant template pages
-    if(progress_type == "detail") {
+    if(progress_type == "detail" && parent_order_id.length > 0) {
         loadChildren(parent_order_id[0]);
     }
 
@@ -115,16 +117,7 @@ function progressBar() {
         // otherwise update progress bars
         for (i = parent_order_id.length; i > 0; i--) {
             // update progress bar
-            remove = loadProgress(parent_order_id[i-1]);
-            // if remove flag is set to true
-            if (remove == true) {
-                if (parent_order_id.length > 0) {
-                    // remove element
-                    parent_order_id.splice(i-1, 1);
-                    // reset flag
-                    remove = false;
-                }
-            }   
+            loadProgress(parent_order_id[i-1]);   
         }
     }
 }
