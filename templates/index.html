@@ -17,6 +17,7 @@
         <tr>
           <th>Order ID</th>
           <th>Sell</th>
+          <th>ETF Ticker</th>
           <th>Quantity</th>
           <th>Time</th>
           <th>Progress</th>
@@ -29,6 +30,7 @@
               <tr>
                   <td> <a href="{% url 'order_detail' order.id %}">{{ order.id }} </a>
                   <td> {{ order.is_sell }}
+                  <td> {{ order.stock_type }}
                   <td> {{ order.quantity }}
                   <td class="col-md-3"> {{ order.time_executed }} EST
                   <td class="col-md-3"> 
@@ -59,6 +61,7 @@
         <tr>
           <th>Order ID</th>
           <th>Sell</th>
+          <th>ETF Ticker</th>
           <th>Quantity</th>
           <th>Time</th>
           <th>Progress</th>
@@ -71,6 +74,7 @@
               <tr>
                   <td> <a href="{% url 'order_detail' order.id %}">{{ order.id }} </a>
                   <td> {{ order.is_sell }}
+                  <td> {{ order.stock_type }}
                   <td> {{ order.quantity }}
                   <td class="col-md-3"> {{ order.time_executed }} EST
                   <td class="col-md-3"> 
@@ -94,6 +98,7 @@
         <tr>
           <th>Order ID</th>
           <th>Sell</th>
+          <th>ETF Ticker</th>
           <th>Quantity</th>
           <th>Time</th>
           <th>Progress</th>
@@ -106,6 +111,7 @@
               <tr>
                   <td> <a href="{% url 'order_detail' order.id %}">{{ order.id }} </a>
                   <td> {{ order.is_sell }}
+                  <td> {{ order.stock_type }}
                   <td> {{ order.quantity }}
                   <td class="col-md-3"> {{ order.time_executed }} EST
                   <td class="col-md-3"> 
@@ -128,9 +134,10 @@
         <tr>
           <th>Order ID</th>
           <th>Sell</th>
+          <th>ETF Ticker</th>
           <th>Quantity</th>
           <th>Time</th>
-          <th>Average Price</th>
+          <th>Average Price (USD)</th>
         </tr>
       </thead>
       {% if orders %}
@@ -140,6 +147,7 @@
                     <tr>
                         <td> <a href="{% url 'order_detail' order.id %}">{{ order.id }} </a>
                         <td> {{ order.is_sell }}
+                        <td> {{ order.stock_type }}
                         <td> {{ order.quantity }}
                         <td> {{ order.time_executed }} EST
                         <td> {{ order.avg_price }}
