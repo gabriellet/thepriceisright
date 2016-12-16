@@ -41,6 +41,11 @@ function progressBar() {
         $.get(progress_url, function( newprogress ) {
             $(selector).attr("aria-valuenow", parseFloat(newprogress)).css("width",parseFloat(newprogress)+"%");
             $(selector).html(newprogress+"%");
+            if(newprogress == 100.0) {
+                if(progress_type == "detail") {
+                    $("#order-buttons").html("");
+                }
+            }
         });
 
         return r; // TODO: can't actually return r like this, need a callback function
@@ -59,8 +64,10 @@ function progressBar() {
         var children_url = "/order/" + id + "/get_children/" + child_id + "/";
 
         // get current order children
-        $.get(children_url, function( children ) {
-            children = JSON.parse(children);
+        $.get(children_url, function( children_and_stats ) {
+            children_and_stats = JSON.parse(children_and_stats);
+            var children = children_and_stats["children"];
+            var stats = children_and_stats["stats"];
 
             for(var i=0; i<children.length; i++) {
                 // format output
@@ -87,6 +94,11 @@ function progressBar() {
                         <td> " + fields["price"] + " \
                     </tr>"
                 );
+
+                // update stats
+                $("#stats").html("<b>Average Price:</b> " + stats["average_price"] + 
+                    ", <b>Gross Sale Price:</b> " + stats["total_price"] + 
+                    ", <b>Total Quantity Sold:</b> " + stats["total_quantity"]);
             }
         });
     }

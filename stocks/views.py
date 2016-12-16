@@ -9,6 +9,8 @@ from forms import ParentOrderForm, PauseResumeForm
 from models import ParentOrder, ChildOrder
 from threading import Thread
 
+import json
+
 @login_required(login_url="/")
 def index(request):
     if request.method == 'POST':
@@ -92,10 +94,14 @@ def get_status(request, id):
 def get_children(request, id, child_id):
     parent = get_object_or_404(ParentOrder, id=id)
     try:
-        children = ChildOrder.objects.filter(parent_order__id=id).filter(id__gt=child_id)
+        children = ChildOrder.objects.filter(parent_order__id=id)
     except ChildOrder.DoesNotExist:
         children = ChildOrder.objects.none()
-    return HttpResponse(mark_safe(serialize('json', children)))
+    parent_stats = parent.get_stats(children)
+    parent_stats["average_price"] = '{:,.2f}'.format(parent_stats["average_price"])
+    parent_stats["total_price"] = '{:,.2f}'.format(parent_stats["total_price"])
+    return_dict = {"children": json.loads(serialize('json', children.filter(id__gt=child_id))), "stats": parent_stats}
+    return HttpResponse(mark_safe(json.dumps(return_dict, ensure_ascii=False)))
 
 def get_children_undefined(request, id):
     parent = get_object_or_404(ParentOrder, id=id)
@@ -103,7 +109,11 @@ def get_children_undefined(request, id):
         children = ChildOrder.objects.filter(parent_order__id=id)
     except ChildOrder.DoesNotExist:
         children = ChildOrder.objects.none()
-    return HttpResponse(mark_safe(serialize('json', children)))
+    parent_stats = parent.get_stats(children)
+    parent_stats["average_price"] = '{:,.2f}'.format(parent_stats["average_price"])
+    parent_stats["total_price"] = '{:,.2f}'.format(parent_stats["total_price"])
+    return_dict = {"children": json.loads(serialize('json', children)), "stats": parent_stats}
+    return HttpResponse(mark_safe(json.dumps(return_dict, ensure_ascii=False)))
 
 def pause_order(request, id):
     parent = get_object_or_404(ParentOrder, id=id)
