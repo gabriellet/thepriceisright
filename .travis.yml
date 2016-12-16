@@ -13,3 +13,4 @@ script:
     - django-lint authentication/
     - django-lint priceIsRight/
     - django-lint manage.py
+    - flake8
