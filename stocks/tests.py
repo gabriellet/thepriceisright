@@ -8,7 +8,7 @@ from mock import MagicMock
 
 class ParentOrderTestCase(TestCase):
     def setUp(self):
-    	u = User.objects.create(username="LIN",password='linisawesome')
+        u = User.objects.create(username="LIN",password='linisawesome')
         ParentOrder.objects.create(stock_type="ACME", is_sell=True, quantity=1000, user=u)
         ParentOrder.objects.create(stock_type="negative", is_sell=True, quantity=-1, user=u)  # broken case, negative numbers not allowed
         ParentOrder.objects.create(stock_type="zero", is_sell=True, quantity=0, user=u)  # broken case, negative numbers not allowed
@@ -49,5 +49,3 @@ class ParentOrderTestCase(TestCase):
 
     def parent_order_can_pause_and_resume(self):
         return True
-
-
