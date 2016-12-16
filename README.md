@@ -14,7 +14,7 @@ Members:
 ![Travis CI Build Status](https://travis-ci.org/gabriellet/thepriceisright.svg?branch=master)    
 
 ### Usage
-First, clone the JPM [Exchange Server](https://github.com/gabriellet/exchange_simulator). While in the `exchange_siimulator` directory, run this server from the command line using `python server.py`. Then in a separate terminal, while in the `thepriceisright` directory, run the app using `python manage.py runserver`. After this, start your preferred browser and go to http://localhost:8000. Enjoy!
+First, clone the JPM [Exchange Server](https://github.com/gabriellet/exchange_simulator). While in the `exchange_siimulator` directory, run this server from the command line using `python server.py`. Then in a separate terminal, while in the `thepriceisright` directory, run the app using `python manage.py runserver`. After this, start your preferred browser and go to [http://localhost:8000](http://localhost:8000). Enjoy!
 
 ### Database Migrations
 `python manage.py makemigrations`
