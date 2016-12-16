@@ -9,3 +9,8 @@ script:
     - python manage.py test
     - coverage run --source='.' manage.py test stocks 
     - coverage report
+    - django-lint stocks/
+    - django-lint authentication/
+    - django-lint priceIsRight/
+    - django-lint manage.py
+    - flake8
