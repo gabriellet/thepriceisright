@@ -13,30 +13,30 @@ def validate_order_quantity(value):
 
 class ParentOrderForm(forms.ModelForm):
 
-	BUY_OR_SELL_CHOICE = (
-    	(True, 'Sell'),
-	)
+    BUY_OR_SELL_CHOICE = (
+        (True, 'Sell'),
+    )
 
-	STOCK_CHOICE = (
-    	('ACME ETF', 'ACME ETF'),
-	)
+    STOCK_CHOICE = (
+        ('ACME ETF', 'ACME ETF'),
+    )
 
-	is_sell = forms.ChoiceField(label="Buy or Sell?", choices=BUY_OR_SELL_CHOICE, required=True, 
-		widget=forms.Select(attrs={'class': 'form-control'}))
-	quantity = forms.IntegerField(label='Quantity', required=True,
-		error_messages = {'required': _('Enter a whole number.')},
-		widget=forms.NumberInput(attrs={'class': 'form-control'}))
-	stock_type = forms.ChoiceField(label="Stock Type", choices=STOCK_CHOICE, required=True, 
-		widget=forms.Select(attrs={'class': 'form-control'}))
+    is_sell = forms.ChoiceField(label="Buy or Sell?", choices=BUY_OR_SELL_CHOICE, required=True, 
+        widget=forms.Select(attrs={'class': 'form-control'}))
+    quantity = forms.IntegerField(label='Quantity', required=True,
+        error_messages = {'required': _('Enter a whole number.')},
+        widget=forms.NumberInput(attrs={'class': 'form-control'}))
+    stock_type = forms.ChoiceField(label="Stock Type", choices=STOCK_CHOICE, required=True, 
+        widget=forms.Select(attrs={'class': 'form-control'}))
 
-	class Meta:
-		model = ParentOrder
-		fields = ('is_sell', 'quantity', 'stock_type')
+    class Meta:
+        model = ParentOrder
+        fields = ('is_sell', 'quantity', 'stock_type')
 
 class PauseResumeForm(forms.ModelForm):
 
-	status = forms.CharField(widget = forms.HiddenInput(), required = True)
+    status = forms.CharField(widget = forms.HiddenInput(), required = True)
 
-	class Meta:
-		model = ParentOrder
-		fields = ('status',)
+    class Meta:
+        model = ParentOrder
+        fields = ('status',)
