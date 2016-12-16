@@ -10,7 +10,7 @@ Members:
 * Aaron Ong @Aaronong    
 
 ### Build Status     
-![Travis CI Build Status](https://travis-ci.org/gabriellet/thepriceisright.svg?branch=master)
+![Travis CI Build Status](https://travis-ci.org/gabriellet/thepriceisright.svg?branch=master)   
 See current build information [here](https://travis-ci.org/gabriellet/thepriceisright).
 
 ### Usage
