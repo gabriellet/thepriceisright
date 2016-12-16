@@ -98,10 +98,17 @@ def get_status(request, id):
 	return HttpResponse(parent.status)
 
 def get_children(request, id, child_id):
-	print "in get_children"
 	parent = get_object_or_404(ParentOrder, id=id)
 	try:
 		children = ChildOrder.objects.filter(parent_order__id=id).filter(id__gt=child_id)
+	except ChildOrder.DoesNotExist:
+		children = ChildOrder.objects.none()
+	return HttpResponse(mark_safe(serialize('json', children)))
+
+def get_children_undefined(request, id):
+	parent = get_object_or_404(ParentOrder, id=id)
+	try:
+		children = ChildOrder.objects.filter(parent_order__id=id)
 	except ChildOrder.DoesNotExist:
 		children = ChildOrder.objects.none()
 	return HttpResponse(mark_safe(serialize('json', children)))
